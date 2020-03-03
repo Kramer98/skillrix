@@ -4,6 +4,7 @@ import MicrosoftLogin from "react-microsoft-login";
 const Test=() => {
   const authHandler = (err, data) => {
     console.log(err, data);
+    
   };
  
   return (
