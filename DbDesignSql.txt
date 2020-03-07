@@ -1,0 +1,75 @@
+create table Employee_details(
+	emp_id varchar(20)not null,
+	email varchar(50) not null,
+	emp_name varchar(100),
+	account varchar(50),
+	practise varchar(50),
+	hire_date date,
+	roles varchar(50),
+	approval boolean,
+	manager_id varchar(50),
+	primary key(emp_id)
+)
+
+create table Manager(
+	emp_id varchar(20),
+	foreign key(emp_id) references Employee_details(emp_id)
+)
+
+alter table Manager add constraint emp_uni unique(emp_id)
+
+alter table Employee_details add constraint fk foreign key(manager_id) references Manager(emp_id)
+
+create table Skills(
+	skill_name varchar(100) not null,
+	primary key(skill_name)
+)
+
+create table Employee_skills(
+	emp_id varchar(20),
+	skill_name varchar(100),
+	experience float,
+	emp_rating int,
+	man_rating int
+
+)
+alter table Employee_skills add constraint fk_1 foreign key (emp_id) references Employee_details(emp_id)
+alter table Skills add constraint fk_2 foreign key (skill_name) references Skills(skill_name)
+
+
+
+//Insert
+
+insert into Employee_details values ('T0001','shyamala@enquero.com','Shyamala','Atlassian','javascript','2015-10-11','UI',false)
+insert into Employee_details values ('T0002','prashant@enquero.com','Prashant','Atlassian','javascript','2016-10-12','UI',false)
+insert into Employee_details values ('T0003','ashish@enquero.com','Ashish','Cisco','Java','2017-1-11','UI',false)
+insert into Employee_details values ('T0004','vihas@enquero.com','Vihas','Vmware','Cotlin','2018-10-1','UI',false)
+insert into Employee_details values ('T0005','shreya@enquero.com','Shreya','Oracle','React','2014-10-6','UI',false)
+
+insert into Manager values ('T0001'),('T0002'),('T0003')
+
+
+update Employee_details set Manager_id = 'T0003' where emp_id = 'T0001'
+update Employee_details set Manager_id = 'T0001' where emp_id = 'T0002'
+update Employee_details set Manager_id = 'T0002' where emp_id = 'T0003'
+update Employee_details set Manager_id = 'T0002' where emp_id = 'T0004'
+update Employee_details set Manager_id = 'T0003' where emp_id = 'T0005'
+
+
+insert into skills values ('javascript'),('java'),('cotlin'),('react'),('cpp'),('python'),('scala')
+
+insert into Employee_skills values ('T0001','javascript',4.5,8)
+insert into Employee_skills values ('T0001','java',3,7)
+insert into Employee_skills values ('T0002','cpp',2,6)
+insert into Employee_skills values ('T0003','python',3,8)
+insert into Employee_skills values ('T0004','react',3,9)
+insert into Employee_skills values ('T0004','java',3,7)
+insert into Employee_skills values ('T0005','python',2,9)
+
+
+
+
+
+
+
+
