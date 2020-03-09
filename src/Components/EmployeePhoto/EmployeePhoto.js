@@ -1,6 +1,6 @@
 import React from 'react'
 import { Image } from 'semantic-ui-react'
-import dummy from '../images/dummy.jpg'
+import dummy from '../../images/dummy.jpg'
 
 const EmployeePhoto=(props)=>{
     return(
