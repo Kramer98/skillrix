@@ -2,7 +2,9 @@ import React from 'react'
 import {Input,Table} from 'semantic-ui-react'
 
 const DisplaySkills=props=>{
-    const skills=props.skills.map((skill,index)=>{
+    if(props.skills===[])
+        return <div>You don't have any added skills yet.</div>
+        const skills=props.skills.map((skill,index)=>{
         const disabledRow=skill.skill_approval?'':'disabled'
         return(
             <Table.Row key={index} disabled={disabledRow} textAlign='center'>

@@ -1,5 +1,4 @@
 import React from 'react'
-import EmployeeMenu from '../EmployeeMenu/EmployeeMenu'
 import EmployeePhoto from '../EmployeePhoto/EmployeePhoto'
 import {Grid} from 'semantic-ui-react'
 import EmployeeDetails from '../EmployeeDetails/EmployeeDetails'
@@ -7,9 +6,6 @@ import EmployeeDetails from '../EmployeeDetails/EmployeeDetails'
 const EmployeeHome=(props)=>{
     return(
     <Grid>
-        <Grid.Column width={4}>
-            <EmployeeMenu/>
-        </Grid.Column>
         <Grid.Column width={10}>
             <Grid.Row stretched>
                 <EmployeePhoto marginBottom={10}/>

@@ -3,7 +3,6 @@ import {Button} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import { fetchSkills } from '../../actions'
 import DisplaySkills from '../DisplaySkills/DisplaySkills'
-import skillrix from '../../api/skillrix'
 import axios from 'axios'
 
 class SkillsPage extends Component{
