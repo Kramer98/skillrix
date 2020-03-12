@@ -159,5 +159,7 @@ module.exports = {
     getSkillById,
     addSkill,
     addUserSKill,
-    getEmp
+    getEmp,
+    getApproval,
+    getUserById,
 };
