@@ -125,6 +125,7 @@ const getEmp = (req, res) => {
 
 const updateUserSKill = (req, res) => {
     const { emp_id } = req.params;
+    console.log(req.body);
     const {
         skill_name,
         experience,
@@ -134,13 +135,13 @@ const updateUserSKill = (req, res) => {
     } = req.body;
     console.log(emp_id);
     pool.query(
-        "UPDATE Employee_skills set skill_name = $2, experience = $3, emp_rating = $4 , man_rating = $5, skill_approval = $6 WHERE emp_id = $1",
+        "UPDATE Employee_skills set experience = $3, emp_rating = $4 , man_rating = $5, skill_approval = $6 WHERE emp_id = $1 AND skill_name=$2",
         [
             emp_id,
             skill_name,
             parseInt(experience),
             parseInt(emp_rating),
-            parseInt(man_rating),
+            parseInt(man_rating) || null,
             skill_approval
         ],
         (error, results) => {
@@ -175,5 +176,6 @@ module.exports = {
     addSkill,
     addUserSKill,
     getEmp,
-    getApproval
+    getApproval,
+    updateUserSKill
 };

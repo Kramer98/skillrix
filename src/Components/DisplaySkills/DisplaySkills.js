@@ -2,7 +2,7 @@ import React from "react";
 import { Input, Table, Button } from "semantic-ui-react";
 
 const DisplaySkills = ({
-    viewSkills,
+    editSkills,
     skills,
     onChange,
     handleEdit,
@@ -18,191 +18,266 @@ const DisplaySkills = ({
     let button = null;
     let row = <Table.Row key='no item'></Table.Row>;
     let disabledRow = editActive.state;
-    if (viewSkills === undefined)
-        return <div>You don't have any added skills yet.</div>;
-    const dispSkills = skills.map((skill, index) => {
-        if (editActive.state === true && editActive.index === index) {
-            // disabledRow = true;
-            button = <Button content='Save' onClick={handleSave} primary />;
-            row = (
-                <>
-                    <Table.Row
-                        key={index}
-                        disabled={!disabledRow}
-                        textAlign='center'
-                    >
-                        <Table.Cell>
-                            {skill.skill_name[0].toUpperCase() +
-                                skill.skill_name.slice(1) || (
-                                <Input
-                                    size='mini'
-                                    name='skill_name'
-                                    onChange={e => onChange(e, index)}
-                                    value={skills[index].skill_name}
-                                />
-                            )}
-                        </Table.Cell>
-                        <Table.Cell>
-                            <Input
-                                size='mini'
-                                name='experience'
-                                onChange={e => onChange(e, index)}
-                                value={skills[index].experience}
-                            />
-                        </Table.Cell>
-                        <Table.Cell>
-                            <Input
-                                size='mini'
-                                name='emp_rating'
-                                type='number'
-                                min={0}
-                                max={10}
-                                onChange={e => onChange(e, index)}
-                                value={skills[index].emp_rating}
-                            />
-                        </Table.Cell>
-                        <Table.Cell>
-                            <Input
-                                size='mini'
-                                name='man_rating'
-                                type='number'
-                                disabled
-                                onChange={e => onChange(e, index)}
-                                value={
-                                    skills[index].man_rating
-                                        ? skills[index].man_rating
-                                        : ""
-                                }
-                            />
-                        </Table.Cell>
-                        <Table.Cell>
-                            {skills.skill_approval ? "Yes" : "No"}
-                        </Table.Cell>
-                        <Table.Cell>{button}</Table.Cell>
-                    </Table.Row>
-                </>
-            );
-        } else if (
-            editActive.newSkill === true &&
-            index === skills.length - 1
-        ) {
-            row = (
-                <>
-                    <Table.Row
-                        key={index}
-                        disabled={disabledRow}
-                        textAlign='center'
-                    >
-                        <Table.Cell>
-                            {skill.skill_name[0].toUpperCase() +
-                                skill.skill_name.slice(1)}
-                        </Table.Cell>
-                        <Table.Cell>{skill.experience}</Table.Cell>
-                        <Table.Cell>{skill.emp_rating}</Table.Cell>
-                        <Table.Cell>
-                            {skill.man_rating ? skill.man_rating : ""}
-                        </Table.Cell>
-                        <Table.Cell>
-                            {skill.skill_approval ? "Yes" : "No"}
-                        </Table.Cell>
-                        <Table.Cell>{button}</Table.Cell>
-                    </Table.Row>
-                    <Table.Row key={index + 1} textAlign='center'>
-                        <Table.Cell>
-                            <Input
-                                size='mini'
-                                name='skill_name'
-                                onChange={e => handleChangeNewSkill(e, index)}
-                                value={editActiveSkill.skill_name}
-                            />
-                        </Table.Cell>
-                        <Table.Cell>
-                            <Input
-                                size='mini'
-                                name='experience'
-                                type='number'
-                                onChange={e => handleChangeNewSkill(e, index)}
-                                value={editActiveSkill.experience}
-                            />
-                        </Table.Cell>
-                        <Table.Cell>
-                            <Input
-                                size='mini'
-                                name='emp_rating'
-                                type='number'
-                                min={0}
-                                max={10}
-                                onChange={e => handleChangeNewSkill(e, index)}
-                                value={editActiveSkill.emp_rating}
-                            />
-                        </Table.Cell>
-                        <Table.Cell>
-                            <Input
-                                size='mini'
-                                name='man_rating'
-                                type='number'
-                                disabled
-                                onChange={e => handleChangeNewSkill(e, index)}
-                                value={
-                                    editActiveSkill.man_rating
-                                        ? editActiveSkill.man_rating
-                                        : ""
-                                }
-                            />
-                        </Table.Cell>
-                        <Table.Cell>
-                            {skill.skill_approval ? "Yes" : "No"}
-                        </Table.Cell>
-                        <Table.Cell>
-                            <Button
-                                content='Save New Skill'
-                                onClick={e => handleSaveNewSkill(e, index)}
-                            />
-                        </Table.Cell>
-                    </Table.Row>
-                </>
-            );
-        } else {
-            button = (
-                <>
-                    <Button
-                        content='Edit'
-                        onClick={e => handleEdit(e, index)}
-                        primary
+    console.log("len", skills.length);
+    if (skills.length === 0 && editActive.newSkill === true) {
+        row = (
+            <Table.Row key={0} textAlign='center'>
+                <Table.Cell>
+                    <Input
+                        size='mini'
+                        name='skill_name'
+                        onChange={e => handleChangeNewSkill(e)}
+                        value={editActiveSkill.skill_name}
                     />
-                    <Button
-                        content='Delete'
-                        onClick={e => handleDelete(e, index)}
-                        secondary
+                </Table.Cell>
+                <Table.Cell>
+                    <Input
+                        size='mini'
+                        name='experience'
+                        type='number'
+                        onChange={e => handleChangeNewSkill(e)}
+                        value={editActiveSkill.experience}
                     />
-                </>
-            );
-            row = (
-                <>
-                    <Table.Row
-                        key={index}
-                        disabled={disabledRow}
-                        textAlign='center'
-                    >
-                        <Table.Cell>
-                            {skill.skill_name[0].toUpperCase() +
-                                skill.skill_name.slice(1)}
-                        </Table.Cell>
-                        <Table.Cell>{skill.experience}</Table.Cell>
-                        <Table.Cell>{skill.emp_rating}</Table.Cell>
-                        <Table.Cell>
-                            {skill.man_rating ? skill.man_rating : ""}
-                        </Table.Cell>
-                        <Table.Cell>
-                            {skill.skill_approval ? "Yes" : "No"}
-                        </Table.Cell>
-                        <Table.Cell>{button}</Table.Cell>
-                    </Table.Row>
-                </>
-            );
-        }
-        return row;
-    });
+                </Table.Cell>
+                <Table.Cell>
+                    <Input
+                        size='mini'
+                        name='emp_rating'
+                        type='number'
+                        min={0}
+                        max={10}
+                        onChange={e => handleChangeNewSkill(e)}
+                        value={editActiveSkill.emp_rating}
+                    />
+                </Table.Cell>
+                <Table.Cell>
+                    <Input
+                        size='mini'
+                        name='man_rating'
+                        type='number'
+                        disabled
+                        onChange={e => handleChangeNewSkill(e)}
+                        value={
+                            editActiveSkill.man_rating
+                                ? editActiveSkill.man_rating
+                                : ""
+                        }
+                    />
+                </Table.Cell>
+                <Table.Cell>
+                    {editActiveSkill.skill_approval ? "Yes" : "No"}
+                </Table.Cell>
+                <Table.Cell>
+                    <Button
+                        content='Save New Skill'
+                        onClick={e => handleSaveNewSkill(e)}
+                    />
+                </Table.Cell>
+            </Table.Row>
+        );
+    }
+    const dispSkills =
+        skills.length === 0
+            ? row
+            : skills.map((skill, index) => {
+                  if (editActive.state === true && editActive.index === index) {
+                      // disabledRow = true;
+                      button = (
+                          <Button
+                              content='Save'
+                              onClick={e => handleSave(e, index)}
+                              primary
+                          />
+                      );
+                      row = (
+                          <>
+                              <Table.Row
+                                  key={index}
+                                  disabled={!disabledRow}
+                                  textAlign='center'
+                              >
+                                  <Table.Cell>
+                                      {skill.skill_name[0].toUpperCase() +
+                                          skill.skill_name.slice(1) || (
+                                          <Input
+                                              size='mini'
+                                              name='skill_name'
+                                              onChange={e => onChange(e, index)}
+                                              value={editActiveSkill.skill_name}
+                                          />
+                                      )}
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                      <Input
+                                          size='mini'
+                                          name='experience'
+                                          onChange={e => onChange(e, index)}
+                                          value={editActiveSkill.experience}
+                                      />
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                      <Input
+                                          size='mini'
+                                          name='emp_rating'
+                                          type='number'
+                                          min={0}
+                                          max={10}
+                                          onChange={e => onChange(e, index)}
+                                          value={editActiveSkill.emp_rating}
+                                      />
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                      <Input
+                                          size='mini'
+                                          name='man_rating'
+                                          type='number'
+                                          disabled
+                                          onChange={e => onChange(e, index)}
+                                          value={
+                                              editActiveSkill.man_rating
+                                                  ? editActiveSkill.man_rating
+                                                  : ""
+                                          }
+                                      />
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                      {skills.skill_approval ? "Yes" : "No"}
+                                  </Table.Cell>
+                                  <Table.Cell>{button}</Table.Cell>
+                              </Table.Row>
+                          </>
+                      );
+                  } else if (
+                      editActive.newSkill === true &&
+                      index === skills.length - 1
+                  ) {
+                      row = (
+                          <>
+                              <Table.Row
+                                  key={index}
+                                  disabled={disabledRow}
+                                  textAlign='center'
+                              >
+                                  <Table.Cell>
+                                      {skill.skill_name[0].toUpperCase() +
+                                          skill.skill_name.slice(1)}
+                                  </Table.Cell>
+                                  <Table.Cell>{skill.experience}</Table.Cell>
+                                  <Table.Cell>{skill.emp_rating}</Table.Cell>
+                                  <Table.Cell>
+                                      {skill.man_rating ? skill.man_rating : ""}
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                      {skill.skill_approval ? "Yes" : "No"}
+                                  </Table.Cell>
+                                  <Table.Cell>{button}</Table.Cell>
+                              </Table.Row>
+                              <Table.Row key={index + 1} textAlign='center'>
+                                  <Table.Cell>
+                                      <Input
+                                          size='mini'
+                                          name='skill_name'
+                                          onChange={e =>
+                                              handleChangeNewSkill(e, index)
+                                          }
+                                          value={editActiveSkill.skill_name}
+                                      />
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                      <Input
+                                          size='mini'
+                                          name='experience'
+                                          type='number'
+                                          onChange={e =>
+                                              handleChangeNewSkill(e, index)
+                                          }
+                                          value={editActiveSkill.experience}
+                                      />
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                      <Input
+                                          size='mini'
+                                          name='emp_rating'
+                                          type='number'
+                                          min={0}
+                                          max={10}
+                                          onChange={e =>
+                                              handleChangeNewSkill(e, index)
+                                          }
+                                          value={editActiveSkill.emp_rating}
+                                      />
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                      <Input
+                                          size='mini'
+                                          name='man_rating'
+                                          type='number'
+                                          disabled
+                                          onChange={e =>
+                                              handleChangeNewSkill(e, index)
+                                          }
+                                          value={
+                                              editActiveSkill.man_rating
+                                                  ? editActiveSkill.man_rating
+                                                  : ""
+                                          }
+                                      />
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                      {skill.skill_approval ? "Yes" : "No"}
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                      <Button
+                                          content='Save New Skill'
+                                          onClick={e =>
+                                              handleSaveNewSkill(e, index)
+                                          }
+                                      />
+                                  </Table.Cell>
+                              </Table.Row>
+                          </>
+                      );
+                  } else {
+                      button = (
+                          <>
+                              <Button
+                                  content='Edit'
+                                  onClick={e => handleEdit(e, index)}
+                                  primary
+                              />
+                              <Button
+                                  content='Delete'
+                                  onClick={e => handleDelete(e, index)}
+                                  secondary
+                              />
+                          </>
+                      );
+                      row = (
+                          <>
+                              <Table.Row
+                                  key={index}
+                                  disabled={disabledRow}
+                                  textAlign='center'
+                              >
+                                  <Table.Cell>
+                                      {skill.skill_name[0].toUpperCase() +
+                                          skill.skill_name.slice(1)}
+                                  </Table.Cell>
+                                  <Table.Cell>{skill.experience}</Table.Cell>
+                                  <Table.Cell>{skill.emp_rating}</Table.Cell>
+                                  <Table.Cell>
+                                      {skill.man_rating ? skill.man_rating : ""}
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                      {skill.skill_approval ? "Yes" : "No"}
+                                  </Table.Cell>
+                                  <Table.Cell>{button}</Table.Cell>
+                              </Table.Row>
+                          </>
+                      );
+                  }
+                  return row;
+              });
     return (
         <Table celled>
             <Table.Header>

@@ -25,35 +25,67 @@ class SkillsPage extends Component {
     };
     getSkills = async () => {
         const response = await axios.post("http://localhost:3001/skills/T0004");
-        this.setState({ viewSkills: response.data, skills: response.data });
+        this.setState({ editSkills: response.data, skills: response.data });
     };
     componentDidMount() {
         this.getSkills();
     }
 
     handleChange = (e, index) => {
-        let newSkills = [...this.state.skills];
-        let name = e.target.name;
-        newSkills[index][name] = e.target.value;
-        newSkills[index]["skill_approval"] = false;
+        // let name = e.target.name;
+        console.log(e.target.name);
+        // newSkills[index][name] = e.target.value;
+        // newSkills[index]["skill_approval"] = false;
+        // this.setState({
+        //     editActiveSkill: [newSkills[index]]
+        // });
+        // this.setState({
+        //     editSkills: [...newSkills]
+        //     // skills: [...this.state.skills]
+        // });
+        // this.setState({
+        //     editActiveSkill: [newSkills[index]]
+        // });
         this.setState({
-            skills: [...newSkills]
-        });
-        this.setState({
-            editActiveSkill: [newSkills[index]]
+            editActiveSkill: {
+                ...this.state.editActiveSkill,
+                [e.target.name]: e.target.value
+            }
         });
     };
 
     handleEdit = (e, index) => {
         let skill = this.state.skills.slice(index, index + 1);
-        this.setState(
-            { editActive: { state: true, index: index, newSkillButton: true } },
-            () => this.setState({ editActiveSkill: skill })
-        );
+        this.setState({
+            editActive: { state: true, index: index, newSkillButton: true },
+            editActiveSkill: { ...skill[0] }
+        });
     };
 
-    handleSave = () => {
-        this.setState({ editActive: { state: false, index: null } });
+    handleSave = async (e, index) => {
+        try {
+            const response = await axios.post(
+                "http://localhost:3001/skills/updateskill/T0004",
+                this.state.editActiveSkill
+            );
+            let newSkills = [...this.state.editSkills];
+            newSkills[index] = this.state.editActiveSkill;
+            this.setState({
+                editActive: { state: false, index: null },
+                skills: [...newSkills]
+            });
+            this.setState({
+                editActiveSkill: {
+                    skill_name: "",
+                    experience: "",
+                    emp_rating: "",
+                    man_rating: "",
+                    skill_approval: false
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     handleChangeNewSkill = (e, index) => {
@@ -129,7 +161,7 @@ class SkillsPage extends Component {
         return (
             <div className='skillsPage'>
                 <DisplaySkills
-                    viewSkills={this.state.viewSkills}
+                    editSkills={this.state.editSkills}
                     skills={this.state.skills || []}
                     onChange={this.handleChange}
                     handleEdit={this.handleEdit}
