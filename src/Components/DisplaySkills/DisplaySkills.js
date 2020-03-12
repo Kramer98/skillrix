@@ -10,12 +10,13 @@ const DisplaySkills = ({
     editActive,
     editActiveSkill,
     handleSaveNewSkill,
-    handleChangeNewSkill
+    handleChangeNewSkill,
+    handleDelete
 }) => {
     console.log("===========PROPS===========", editActiveSkill);
+
     let button = null;
     let row = <Table.Row key='no item'></Table.Row>;
-    let newSkillRow = <></>;
     let disabledRow = editActive.state;
     if (viewSkills === undefined)
         return <div>You don't have any added skills yet.</div>;
@@ -169,7 +170,11 @@ const DisplaySkills = ({
                         onClick={e => handleEdit(e, index)}
                         primary
                     />
-                    <Button content='Delete' secondary />
+                    <Button
+                        content='Delete'
+                        onClick={e => handleDelete(e, index)}
+                        secondary
+                    />
                 </>
             );
             row = (
@@ -198,7 +203,6 @@ const DisplaySkills = ({
         }
         return row;
     });
-
     return (
         <Table celled>
             <Table.Header>

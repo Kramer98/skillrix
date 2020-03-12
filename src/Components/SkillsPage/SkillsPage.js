@@ -84,38 +84,45 @@ class SkillsPage extends Component {
             editActive: {
                 ...this.state.editActive,
                 newSkill: true,
-                newSkillButton: true
+                newSkillButton: true,
+                state: true
             }
         });
     };
 
     handleSaveNewSkill = async (e, index) => {
-        this.setState({
-            skills: [...this.state.skills, this.state.editActiveSkill],
-            editActive: {
-                ...this.state.editActive,
-                newSkillButton: false,
-                newSkill: false
-            }
-        });
-        await axios
-            .post("http://localhost:3001/adduser", this.state.editActiveSkill)
-            .then(response => {
-                console.log(response);
-            })
-            .then(() => {
-                this.setState({
-                    editActiveSkill: {
-                        skill_name: "",
-                        experience: "",
-                        emp_rating: "",
-                        man_rating: "",
-                        skill_approval: false
-                    }
-                });
+        try {
+            const response = await axios.post(
+                "http://localhost:3001/adduser",
+                this.state.editActiveSkill
+            );
+            this.setState({
+                skills: [...this.state.skills, this.state.editActiveSkill],
+                editActive: {
+                    ...this.state.editActive,
+                    newSkillButton: false,
+                    newSkill: false,
+                    state: false
+                }
             });
+            this.setState({
+                editActiveSkill: {
+                    skill_name: "",
+                    experience: "",
+                    emp_rating: "",
+                    man_rating: "",
+                    skill_approval: false
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-        console.log(this.state);
+    handleDelete = (e, i) => {
+        this.setState({
+            skills: this.state.skills.filter((skill, index) => index !== i)
+        });
     };
 
     render() {
@@ -131,6 +138,7 @@ class SkillsPage extends Component {
                     editActiveSkill={this.state.editActiveSkill}
                     handleSaveNewSkill={this.handleSaveNewSkill}
                     handleChangeNewSkill={this.handleChangeNewSkill}
+                    handleDelete={this.handleDelete}
                 />
                 <Button
                     secondary

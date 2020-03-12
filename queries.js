@@ -122,13 +122,3 @@ const getEmp = (req, res) => {
         }
     );
 };
-
-module.exports = {
-    getusers,
-    getUserById,
-    getSkills,
-    getSkillById,
-    addSkill,
-    addUserSKill,
-    getEmp
-};
