@@ -123,6 +123,35 @@ const getEmp = (req, res) => {
     );
 };
 
+const updateUserSKill = (req,res) => 
+{
+    const {emp_id} = req.params;
+    const {skill_name,experience,emp_rating,man_rating,skill_approval } = req.body
+    console.log(emp_id)
+    pool.query('UPDATE Employee_skills set skill_name = $2, experience = $3, emp_rating = $4 , man_rating = $5, skill_approval = $6 WHERE emp_id = $1',[emp_id,skill_name,parseInt(experience),parseInt(emp_rating),parseInt(man_rating),skill_approval],(error,results) => {
+        if(error)
+        {
+            throw error;
+            
+        }
+        res.status(201).send(`Employee added with ID : ${results.insertId}`)
+
+
+    })
+}
+const getApproval=(req,res) =>
+{
+    const {emp_id} = req.params;
+    pool.query('select * from Employee_skills where manager_id = $1 and approval = False',[emp_id],(error,results) =>
+    {
+        if(error)
+        {
+            throw error;
+        }
+        res.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
     getusers,
     getUserById,
