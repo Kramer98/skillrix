@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { fetchSkills } from "../../actions";
 import DisplaySkills from "../DisplaySkills/DisplaySkills";
 import axios from "axios";
-// import { response } from "express";
 //REMOVE EDIT OR VIEW SKILLS IF YOUR ARE NOT ABLE TO IMPLEMENT CANCEL
 class SkillsPage extends Component {
     state = {
@@ -32,20 +31,6 @@ class SkillsPage extends Component {
     }
 
     handleChange = (e, index) => {
-        // let name = e.target.name;
-        console.log(e.target.name);
-        // newSkills[index][name] = e.target.value;
-        // newSkills[index]["skill_approval"] = false;
-        // this.setState({
-        //     editActiveSkill: [newSkills[index]]
-        // });
-        // this.setState({
-        //     editSkills: [...newSkills]
-        //     // skills: [...this.state.skills]
-        // });
-        // this.setState({
-        //     editActiveSkill: [newSkills[index]]
-        // });
         this.setState({
             editActiveSkill: {
                 ...this.state.editActiveSkill,
@@ -63,26 +48,38 @@ class SkillsPage extends Component {
     };
 
     handleSave = async (e, index) => {
+        console.log("====================SAVING===============");
+        console.log(index);
         try {
             const response = await axios.post(
                 "http://localhost:3001/skills/updateskill/T0004",
                 this.state.editActiveSkill
             );
+            console.log(response);
             let newSkills = [...this.state.editSkills];
             newSkills[index] = this.state.editActiveSkill;
-            this.setState({
-                editActive: { state: false, index: null },
-                skills: [...newSkills]
-            });
-            this.setState({
-                editActiveSkill: {
-                    skill_name: "",
-                    experience: "",
-                    emp_rating: "",
-                    man_rating: "",
-                    skill_approval: false
-                }
-            });
+            this.setState(
+                {
+                    skills: [...newSkills],
+                    editActive: {
+                        ...this.state.editActive,
+                        state: false,
+                        index: null,
+                        newSkillButton: false,
+                        newSkill: false
+                    }
+                },
+                () =>
+                    this.setState({
+                        editActiveSkill: {
+                            skill_name: "",
+                            experience: "",
+                            emp_rating: "",
+                            man_rating: "",
+                            skill_approval: false
+                        }
+                    })
+            );
         } catch (error) {
             console.log(error);
         }
@@ -128,24 +125,27 @@ class SkillsPage extends Component {
                 "http://localhost:3001/adduser",
                 this.state.editActiveSkill
             );
-            this.setState({
-                skills: [...this.state.skills, this.state.editActiveSkill],
-                editActive: {
-                    ...this.state.editActive,
-                    newSkillButton: false,
-                    newSkill: false,
-                    state: false
-                }
-            });
-            this.setState({
-                editActiveSkill: {
-                    skill_name: "",
-                    experience: "",
-                    emp_rating: "",
-                    man_rating: "",
-                    skill_approval: false
-                }
-            });
+            this.setState(
+                {
+                    skills: [...this.state.skills, this.state.editActiveSkill],
+                    editActive: {
+                        ...this.state.editActive,
+                        newSkillButton: false,
+                        newSkill: false,
+                        state: false
+                    }
+                },
+                () =>
+                    this.setState({
+                        editActiveSkill: {
+                            skill_name: "",
+                            experience: "",
+                            emp_rating: "",
+                            man_rating: "",
+                            skill_approval: false
+                        }
+                    })
+            );
         } catch (error) {
             console.log(error);
         }
