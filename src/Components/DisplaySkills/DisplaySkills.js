@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Table, Button } from "semantic-ui-react";
+import { Input, Table, Button, Icon, TableFooter } from "semantic-ui-react";
 
 const DisplaySkills = ({
     editSkills,
@@ -13,12 +13,11 @@ const DisplaySkills = ({
     handleChangeNewSkill,
     handleDelete
 }) => {
-    console.log("===========PROPS===========", editActiveSkill);
-
     let button = null;
     let row = <Table.Row key='no item'></Table.Row>;
     let disabledRow = editActive.state;
-    console.log("len", skills.length);
+    if (skills.length === 0 && editActive.newSkill === false)
+        row = "You don't have any skills added yet";
     if (skills.length === 0 && editActive.newSkill === true) {
         row = (
             <Table.Row key={0} textAlign='center'>
@@ -69,9 +68,12 @@ const DisplaySkills = ({
                 </Table.Cell>
                 <Table.Cell>
                     <Button
-                        content='Save New Skill'
+                        icon
+                        color='green'
                         onClick={e => handleSaveNewSkill(e)}
-                    />
+                    >
+                        <Icon name='save outline' />
+                    </Button>
                 </Table.Cell>
             </Table.Row>
         );
@@ -84,10 +86,12 @@ const DisplaySkills = ({
                       // disabledRow = true;
                       button = (
                           <Button
-                              content='Save'
+                              icon
+                              color='green'
                               onClick={e => handleSave(e, index)}
-                              primary
-                          />
+                          >
+                              <Icon name='save outline'></Icon>
+                          </Button>
                       );
                       row = (
                           <>
@@ -151,6 +155,24 @@ const DisplaySkills = ({
                       editActive.newSkill === true &&
                       index === skills.length - 1
                   ) {
+                      button = (
+                          <>
+                              <Button
+                                  icon
+                                  onClick={e => handleEdit(e, index)}
+                                  color='grey'
+                              >
+                                  <Icon name='edit outline'></Icon>
+                              </Button>
+                              <Button
+                                  icon
+                                  onClick={e => handleDelete(e, index)}
+                                  color='red'
+                              >
+                                  <Icon name='trash alternate outline'></Icon>
+                              </Button>
+                          </>
+                      );
                       row = (
                           <>
                               <Table.Row
@@ -228,11 +250,14 @@ const DisplaySkills = ({
                                   </Table.Cell>
                                   <Table.Cell>
                                       <Button
-                                          content='Save New Skill'
+                                          color='green'
+                                          icon
                                           onClick={e =>
                                               handleSaveNewSkill(e, index)
                                           }
-                                      />
+                                      >
+                                          <Icon name='save outline'></Icon>
+                                      </Button>
                                   </Table.Cell>
                               </Table.Row>
                           </>
@@ -241,15 +266,19 @@ const DisplaySkills = ({
                       button = (
                           <>
                               <Button
-                                  content='Edit'
+                                  icon
                                   onClick={e => handleEdit(e, index)}
-                                  primary
-                              />
+                                  color='grey'
+                              >
+                                  <Icon name='edit outline'></Icon>
+                              </Button>
                               <Button
-                                  content='Delete'
+                                  icon
                                   onClick={e => handleDelete(e, index)}
-                                  secondary
-                              />
+                                  color='red'
+                              >
+                                  <Icon name='trash alternate outline'></Icon>
+                              </Button>
                           </>
                       );
                       row = (
@@ -290,7 +319,12 @@ const DisplaySkills = ({
                     <Table.HeaderCell>Actions</Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
-            <Table.Body>{dispSkills}</Table.Body>
+            <Table.Body>
+                {dispSkills
+                    ? dispSkills
+                    : "You Don't have any Skills added yet. Please add bro"}
+            </Table.Body>
+            <TableFooter></TableFooter>
         </Table>
     );
 };

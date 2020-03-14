@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from "semantic-ui-react";
+import { Button, Icon } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { fetchSkills } from "../../actions";
 import DisplaySkills from "../DisplaySkills/DisplaySkills";
@@ -48,21 +48,18 @@ class SkillsPage extends Component {
     };
 
     handleSave = async (e, index) => {
-        console.log("====================SAVING===============");
-        console.log(index);
         try {
             const response = await axios.post(
                 "http://localhost:3001/skills/updateskill/T0004",
                 this.state.editActiveSkill
             );
-            console.log(response);
-            let newSkills = [...this.state.editSkills];
-            newSkills[index] = this.state.editActiveSkill;
             this.setState(
                 {
-                    skills: [...newSkills],
+                    skills: this.state.skills.map((skill, i) => {
+                        if (i === index) return this.state.editActiveSkill;
+                        else return skill;
+                    }),
                     editActive: {
-                        ...this.state.editActive,
                         state: false,
                         index: null,
                         newSkillButton: false,
@@ -86,12 +83,6 @@ class SkillsPage extends Component {
     };
 
     handleChangeNewSkill = (e, index) => {
-        console.log(
-            "__________e_________",
-            e.target.name,
-            e.target.value,
-            index
-        );
         this.setState({
             editActiveSkill: {
                 ...this.state.editActiveSkill,
@@ -151,10 +142,30 @@ class SkillsPage extends Component {
         }
     };
 
-    handleDelete = (e, i) => {
-        this.setState({
-            skills: this.state.skills.filter((skill, index) => index !== i)
-        });
+    handleDelete = async (e, i) => {
+        try {
+            const response = await axios.post(
+                "http://localhost:3001/skills/deleteskill/T0004",
+                this.state.skills[i]
+            );
+            this.setState(
+                {
+                    skills: this.state.skills.filter(
+                        (skill, index) => index !== i
+                    )
+                },
+                () =>
+                    this.setState({
+                        skill_name: "",
+                        experience: "",
+                        emp_rating: "",
+                        man_rating: "",
+                        skill_approval: false
+                    })
+            );
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     render() {
@@ -173,11 +184,13 @@ class SkillsPage extends Component {
                     handleDelete={this.handleDelete}
                 />
                 <Button
-                    secondary
+                    icon
                     disabled={this.state.editActive.newSkillButton}
                     onClick={this.handleAddNewSkill}
+                    color='blue'
                 >
-                    Add Skill
+                    <Icon name='add' />
+                    &nbsp;Add Skill
                 </Button>
             </div>
         );

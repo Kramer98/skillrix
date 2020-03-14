@@ -168,18 +168,21 @@ const getApproval = (req, res) => {
     );
 };
 
-const deleteData = (req,res)=> {
-    const {id} = req.params;
-    const {skill_name} = req.body;
-    pool.query('delete from Employee_skills where emp_id = $1 and skill_name = $2',[id,skill_name],(error,results) =>
-    {
-        if(error)
-        {
-            throw error;
+const deleteData = (req, res) => {
+    console.log(req.body);
+    const { id } = req.params;
+    const { skill_name } = req.body;
+    pool.query(
+        "delete from Employee_skills where emp_id = $1 and skill_name = $2",
+        [id, skill_name],
+        (error, results) => {
+            if (error) {
+                throw error;
+            }
+            res.status(200).send(`User deleted with ID: ${id}`);
         }
-        res.status(200).send(`User deleted with ID: ${id}`)
-    })
-}
+    );
+};
 
 module.exports = {
     getusers,
@@ -191,5 +194,5 @@ module.exports = {
     getEmp,
     getApproval,
     updateUserSKill,
-    deleteData,
+    deleteData
 };

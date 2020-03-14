@@ -31,4 +31,4 @@ app.post("/adduser", db.addUserSKill);
 app.post("/manager/:emp_id", db.getEmp);
 app.post("/manager/ski/:emp_id", db.getApproval);
 app.post("/skills/updateSkill/:emp_id", db.updateUserSKill);
-app.post('/skills/deleteskill/:id',db.deleteData)
+app.post("/skills/deleteskill/:id", db.deleteData);
