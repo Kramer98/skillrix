@@ -13,18 +13,26 @@ class SkillsPage extends Component {
             newSkill: false,
             newSkillButton: false
         },
+        emp_id: "",
         editActiveSkill: {
             skill_name: "",
             experience: "",
             emp_rating: "",
             man_rating: "",
             skill_approval: false,
-            emp_id: "T0004"
+            emp_id: localStorage.getItem("emp_id")
         }
     };
     getSkills = async () => {
-        const response = await axios.post("http://localhost:3001/skills/T0004");
-        this.setState({ editSkills: response.data, skills: response.data });
+        const emp_id = localStorage.getItem("emp_id");
+        const response = await axios.post(
+            `http://localhost:3001/skills/${emp_id}`
+        );
+        this.setState({
+            editSkills: response.data,
+            skills: response.data,
+            emp_id: emp_id
+        });
     };
     componentDidMount() {
         this.getSkills();
@@ -50,7 +58,7 @@ class SkillsPage extends Component {
     handleSave = async (e, index) => {
         try {
             const response = await axios.post(
-                "http://localhost:3001/skills/updateskill/T0004",
+                `http://localhost:3001/skills/updateskill/${this.state.emp_id}`,
                 this.state.editActiveSkill
             );
             this.setState(
@@ -73,7 +81,8 @@ class SkillsPage extends Component {
                             experience: "",
                             emp_rating: "",
                             man_rating: "",
-                            skill_approval: false
+                            skill_approval: false,
+                            emp_id: this.state.emp_id
                         }
                     })
             );
@@ -99,7 +108,7 @@ class SkillsPage extends Component {
                 emp_rating: "",
                 man_rating: "",
                 skill_approval: false,
-                emp_id: "T0004"
+                emp_id: localStorage.getItem("emp_id")
             },
             editActive: {
                 ...this.state.editActive,
@@ -133,7 +142,8 @@ class SkillsPage extends Component {
                             experience: "",
                             emp_rating: "",
                             man_rating: "",
-                            skill_approval: false
+                            skill_approval: false,
+                            emp_id: this.state.emp_id
                         }
                     })
             );
@@ -145,7 +155,7 @@ class SkillsPage extends Component {
     handleDelete = async (e, i) => {
         try {
             const response = await axios.post(
-                "http://localhost:3001/skills/deleteskill/T0004",
+                `http://localhost:3001/skills/deleteskill/${this.state.emp_id}`,
                 this.state.skills[i]
             );
             this.setState(
@@ -156,11 +166,14 @@ class SkillsPage extends Component {
                 },
                 () =>
                     this.setState({
-                        skill_name: "",
-                        experience: "",
-                        emp_rating: "",
-                        man_rating: "",
-                        skill_approval: false
+                        editActiveSkill: {
+                            skill_name: "",
+                            experience: "",
+                            emp_rating: "",
+                            man_rating: "",
+                            skill_approval: false,
+                            emp_id: this.state.emp_id
+                        }
                     })
             );
         } catch (err) {

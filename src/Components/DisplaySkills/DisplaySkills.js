@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Table, Button, Icon, TableFooter } from "semantic-ui-react";
+import { Input, Table, Button, Icon } from "semantic-ui-react";
 
 const DisplaySkills = ({
     editSkills,
@@ -13,11 +13,10 @@ const DisplaySkills = ({
     handleChangeNewSkill,
     handleDelete
 }) => {
+    console.log(editActiveSkill);
     let button = null;
     let row = <Table.Row key='no item'></Table.Row>;
     let disabledRow = editActive.state;
-    if (skills.length === 0 && editActive.newSkill === false)
-        row = "You don't have any skills added yet";
     if (skills.length === 0 && editActive.newSkill === true) {
         row = (
             <Table.Row key={0} textAlign='center'>
@@ -320,11 +319,17 @@ const DisplaySkills = ({
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {dispSkills
-                    ? dispSkills
-                    : "You Don't have any Skills added yet. Please add bro"}
+                {dispSkills ? (
+                    dispSkills
+                ) : (
+                    <Table.Row>
+                        <Table.Cell>
+                            "You Don't have any Skills added yet. Please add
+                            bro"
+                        </Table.Cell>
+                    </Table.Row>
+                )}
             </Table.Body>
-            <TableFooter></TableFooter>
         </Table>
     );
 };

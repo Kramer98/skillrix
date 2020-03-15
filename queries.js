@@ -10,7 +10,6 @@ const pool = new Pool({
 const getusers = (request, response) => {
     pool.query("select emp_name from Employee_details", (error, results) => {
         if (error) {
-            //console.log("i m breaking here at get")
             throw error;
         }
         response.status(200).json(results.rows);
@@ -228,12 +227,11 @@ const authUser = (req, res) => {
                         (err, result) => {
                             if (result === true) {
                                 pool.query(
-                                    "SELECT * from employee_details WHERE email=$1",
+                                    "SELECT emp_id,manager,emp_name from employee_details WHERE email=$1",
                                     [email],
                                     (err, results) => {
                                         if (err) throw err;
                                         else {
-                                            console.log(results.rows);
                                             res.status(201).json({
                                                 err: null,
                                                 data: results.rows[0]
@@ -242,7 +240,7 @@ const authUser = (req, res) => {
                                     }
                                 );
                             } else
-                                res.status(403).json({
+                                res.status(201).json({
                                     err: `Invalid Password`
                                 });
                         }
