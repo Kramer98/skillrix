@@ -1,4 +1,5 @@
 const Pool = require("pg").Pool;
+const bcrypt = require("bcrypt");
 const pool = new Pool({
     user: "postgres",
     host: "localhost",
@@ -18,9 +19,6 @@ const getusers = (request, response) => {
 
 const getUserById = (req, res) => {
     const { email } = req.params;
-    // console.log("-------------req.params------------", req.params)
-    // console.log("----------req.query---------", req.query)
-    // console.log(id)
     pool.query(
         "select emp_name from Employee_details where email= $1",
         [email],
@@ -184,6 +182,77 @@ const deleteData = (req, res) => {
     );
 };
 
+const addNewUser = (req, res) => {
+    const { email, password } = req.body;
+    console.log(email);
+    console.log(password);
+    const saltRounds = 10;
+    bcrypt.hash(password, saltRounds, function(err, hashedPassword) {
+        if (err) {
+            throw err;
+        } else {
+            pool.query(
+                "insert into employee_auth (email,password) values ($1,$2)",
+                [email, hashedPassword],
+                (error, results) => {
+                    if (error) {
+                        throw error;
+                    } else {
+                        console.log(results);
+                        res.status(201).send(
+                            `Employee added with ID : ${results.email}`
+                        );
+                    }
+                }
+            );
+        }
+    });
+};
+
+const authUser = (req, res) => {
+    const { email, password } = req.body;
+    pool.query(
+        "SELECT * FROM EMPLOYEE_AUTH WHERE email=$1",
+        [email],
+        (error, results) => {
+            if (error) {
+                throw error;
+            } else {
+                console.log(results.rows);
+                if (results.rowCount === 0)
+                    res.status(201).json({ err: `User Not Found` });
+                else {
+                    bcrypt.compare(
+                        password,
+                        results.rows[0].password,
+                        (err, result) => {
+                            if (result === true) {
+                                pool.query(
+                                    "SELECT * from employee_details WHERE email=$1",
+                                    [email],
+                                    (err, results) => {
+                                        if (err) throw err;
+                                        else {
+                                            console.log(results.rows);
+                                            res.status(201).json({
+                                                err: null,
+                                                data: results.rows[0]
+                                            });
+                                        }
+                                    }
+                                );
+                            } else
+                                res.status(403).json({
+                                    err: `Invalid Password`
+                                });
+                        }
+                    );
+                }
+            }
+        }
+    );
+};
+
 module.exports = {
     getusers,
     getUserById,
@@ -194,5 +263,7 @@ module.exports = {
     getEmp,
     getApproval,
     updateUserSKill,
-    deleteData
+    deleteData,
+    addNewUser,
+    authUser
 };
