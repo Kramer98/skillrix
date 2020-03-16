@@ -22,11 +22,15 @@ export default class AppHeader extends Component {
                             active={activeItem === "Home"}
                             onClick={this.handleItemClick}
                             as={Link}
-                            to={this.props.userdata.manager ? "mhome" : "ehome"}
+                            to={
+                                this.props.userdata.manager
+                                    ? "/mhome"
+                                    : "/ehome"
+                            }
                         />
                         <Menu.Item
                             name='Skills'
-                            active={activeItem === "skills"}
+                            active={activeItem === "Skills"}
                             onClick={this.handleItemClick}
                             as={Link}
                             to={"/skills"}

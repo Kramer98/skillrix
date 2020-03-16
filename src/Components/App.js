@@ -3,8 +3,11 @@ import { Route, withRouter } from "react-router-dom";
 import SkillsPage from "./SkillsPage/SkillsPage";
 import Login from "./Login/Login";
 import EmployeeHome from "./EmployeeHome/EmployeeHome";
+import ManagerHome from "./ManagerHome/ManagerHome";
 import axios from "axios";
 import Header from "./Header/Header";
+import ApprovalsPage from "./ApprovalsPage/ApprovalsPage";
+import EmployeeApprovalPage from "./EmployeeApprovalPage/EmployeeApprovalPage";
 
 class App extends Component {
     state = {
@@ -90,8 +93,19 @@ class App extends Component {
                         />
                     )}
                 />
+                <Route exact path='/mhome' component={ManagerHome} />
                 <Route exact path='/ehome' component={EmployeeHome} />
-                <Route exact path='/skills' component={SkillsPage} />)
+                <Route exact path='/skills' component={SkillsPage} />
+                <Route exact path='/approvals' component={ApprovalsPage} />
+                <Route
+                    path='/approvals/:id'
+                    render={props => (
+                        <EmployeeApprovalPage
+                            {...props}
+                            emp_id={props.match.params.id}
+                        />
+                    )}
+                />
             </div>
         );
     }

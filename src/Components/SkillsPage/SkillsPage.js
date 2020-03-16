@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Icon } from "semantic-ui-react";
+import { Button, Icon, Container, Header } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { fetchSkills } from "../../actions";
 import DisplaySkills from "../DisplaySkills/DisplaySkills";
@@ -195,7 +195,8 @@ class SkillsPage extends Component {
 
     render() {
         return (
-            <div className='skillsPage'>
+            <Container>
+                <Header as='h2' content='Create/Update Skills' />
                 <DisplaySkills
                     editSkills={this.state.editSkills}
                     skills={this.state.skills || []}
@@ -210,6 +211,7 @@ class SkillsPage extends Component {
                     handleChangeEmpRating={this.handleChangeEmpRating}
                 />
                 <Button
+                    floated='right'
                     icon
                     disabled={this.state.editActive.newSkillButton}
                     onClick={this.handleAddNewSkill}
@@ -218,7 +220,7 @@ class SkillsPage extends Component {
                     <Icon name='add' />
                     &nbsp;Add Skill
                 </Button>
-            </div>
+            </Container>
         );
     }
 }

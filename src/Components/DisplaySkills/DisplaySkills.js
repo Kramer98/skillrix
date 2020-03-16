@@ -356,7 +356,7 @@ const DisplaySkills = ({
                   return row;
               });
     return (
-        <Table celled>
+        <Table color='blue' celled>
             <Table.Header>
                 <Table.Row textAlign='center'>
                     <Table.HeaderCell>Skill Name</Table.HeaderCell>

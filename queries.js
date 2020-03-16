@@ -151,19 +151,6 @@ const updateUserSKill = (req, res) => {
         }
     );
 };
-const getApproval = (req, res) => {
-    const { emp_id } = req.params;
-    pool.query(
-        "select * from Employee_skills where manager_id = $1 and approval = False",
-        [emp_id],
-        (error, results) => {
-            if (error) {
-                throw error;
-            }
-            res.status(200).json(results.rows);
-        }
-    );
-};
 
 const deleteData = (req, res) => {
     console.log(req.body);
@@ -251,6 +238,38 @@ const authUser = (req, res) => {
     );
 };
 
+const getApprovals = (req, res) => {
+    const { emp_id } = req.body;
+    console.log(req.body);
+    pool.query(
+        "select DISTINCT emp_id,emp_name from employee_Skills natural join employee_details where manager_id = $1 and skill_approval = false",
+        [emp_id],
+        (error, results) => {
+            if (error) {
+                throw error;
+            }
+            console.log(results.rows);
+            res.status(200).json(results.rows);
+        }
+    );
+};
+
+const getUnapprovedSkillsById = (req, res) => {
+    const { id } = req.params;
+    console.log(id);
+    //    pool.query('select skill_name,experience,emp_rating,man_rating,skill_approval from Employee_Skills where emp_id = (select emp_id from Employee_details where email= $1' [id],(error,results) => {
+    pool.query(
+        "select skill_name,experience,emp_rating,man_rating,skill_approval from Employee_Skills where emp_id = $1 and skill_approval=false",
+        [id],
+        (error, results) => {
+            if (error) {
+                console.log(error);
+            }
+            res.status(200).json(results.rows);
+        }
+    );
+};
+
 module.exports = {
     getusers,
     getUserById,
@@ -259,9 +278,10 @@ module.exports = {
     addSkill,
     addUserSKill,
     getEmp,
-    getApproval,
+    getApprovals,
     updateUserSKill,
     deleteData,
     addNewUser,
-    authUser
+    authUser,
+    getUnapprovedSkillsById
 };
