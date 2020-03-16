@@ -1,5 +1,58 @@
 import React from "react";
-import { Input, Table, Button, Icon } from "semantic-ui-react";
+import { Input, Table, Button, Icon, Dropdown } from "semantic-ui-react";
+
+const options = [
+    {
+        key: 1,
+        text: "1",
+        value: 1
+    },
+    {
+        key: 2,
+        text: "2",
+        value: 2
+    },
+    {
+        key: 3,
+        text: "3",
+        value: 3
+    },
+    {
+        key: 4,
+        text: "4",
+        value: 4
+    },
+    {
+        key: 5,
+        text: "5",
+        value: 5
+    },
+    {
+        key: 6,
+        text: "6",
+        value: 6
+    },
+    {
+        key: 7,
+        text: "7",
+        value: 7
+    },
+    {
+        key: 8,
+        text: "8",
+        value: 8
+    },
+    {
+        key: 9,
+        text: "9",
+        value: 9
+    },
+    {
+        key: 10,
+        text: "10",
+        value: 10
+    }
+];
 
 const DisplaySkills = ({
     editSkills,
@@ -11,7 +64,8 @@ const DisplaySkills = ({
     editActiveSkill,
     handleSaveNewSkill,
     handleChangeNewSkill,
-    handleDelete
+    handleDelete,
+    handleChangeEmpRating
 }) => {
     console.log(editActiveSkill);
     let button = null;
@@ -38,13 +92,12 @@ const DisplaySkills = ({
                     />
                 </Table.Cell>
                 <Table.Cell>
-                    <Input
-                        size='mini'
+                    <Dropdown
+                        compact
                         name='emp_rating'
-                        type='number'
-                        min={0}
-                        max={10}
-                        onChange={e => handleChangeNewSkill(e)}
+                        onChange={handleChangeEmpRating}
+                        options={options}
+                        selection
                         value={editActiveSkill.emp_rating}
                     />
                 </Table.Cell>
@@ -119,13 +172,12 @@ const DisplaySkills = ({
                                       />
                                   </Table.Cell>
                                   <Table.Cell>
-                                      <Input
-                                          size='mini'
+                                      <Dropdown
+                                          compact
                                           name='emp_rating'
-                                          type='number'
-                                          min={0}
-                                          max={10}
-                                          onChange={e => onChange(e, index)}
+                                          onChange={handleChangeEmpRating}
+                                          options={options}
+                                          selection
                                           value={editActiveSkill.emp_rating}
                                       />
                                   </Table.Cell>
@@ -216,15 +268,12 @@ const DisplaySkills = ({
                                       />
                                   </Table.Cell>
                                   <Table.Cell>
-                                      <Input
-                                          size='mini'
+                                      <Dropdown
+                                          compact
                                           name='emp_rating'
-                                          type='number'
-                                          min={0}
-                                          max={10}
-                                          onChange={e =>
-                                              handleChangeNewSkill(e, index)
-                                          }
+                                          onChange={handleChangeEmpRating}
+                                          options={options}
+                                          selection
                                           value={editActiveSkill.emp_rating}
                                       />
                                   </Table.Cell>

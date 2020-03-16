@@ -92,10 +92,22 @@ class SkillsPage extends Component {
     };
 
     handleChangeNewSkill = (e, index) => {
+        console.log("----FROM DROPDOWN----", e.target.value, e);
+        console.log("");
         this.setState({
             editActiveSkill: {
                 ...this.state.editActiveSkill,
                 [e.target.name]: e.target.value
+            }
+        });
+    };
+    handleChangeEmpRating = (e, { value }) => {
+        console.log("----FROM DROPDOWN----", value, e);
+        console.log("");
+        this.setState({
+            editActiveSkill: {
+                ...this.state.editActiveSkill,
+                emp_rating: value
             }
         });
     };
@@ -195,6 +207,7 @@ class SkillsPage extends Component {
                     handleSaveNewSkill={this.handleSaveNewSkill}
                     handleChangeNewSkill={this.handleChangeNewSkill}
                     handleDelete={this.handleDelete}
+                    handleChangeEmpRating={this.handleChangeEmpRating}
                 />
                 <Button
                     icon

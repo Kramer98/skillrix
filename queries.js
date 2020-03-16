@@ -89,7 +89,7 @@ const addUserSKill = (req, res) => {
         [
             emp_id,
             skill_name,
-            parseInt(experience),
+            parseFloat(experience),
             parseInt(emp_rating),
             parseInt(man_rating) || null,
             skill_approval
@@ -136,7 +136,7 @@ const updateUserSKill = (req, res) => {
         [
             emp_id,
             skill_name,
-            parseInt(experience),
+            parseFloat(experience),
             parseInt(emp_rating),
             parseInt(man_rating) || null,
             skill_approval
