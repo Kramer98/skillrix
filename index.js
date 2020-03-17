@@ -29,7 +29,6 @@ app.post("/skills/:id", db.getSkillById);
 app.post("/addskill", db.addSkill);
 app.post("/adduser", db.addUserSKill);
 app.post("/manager/:emp_id", db.getEmp);
-// app.post("/manager/ski/:emp_id", db.getApproval);
 app.post("/skills/updateSkill/:emp_id", db.updateUserSKill);
 app.post("/skills/deleteskill/:id", db.deleteData);
 app.post("/addNewUser", db.addNewUser);

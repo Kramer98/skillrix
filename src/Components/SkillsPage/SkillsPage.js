@@ -11,8 +11,7 @@ class SkillsPage extends Component {
             state: false,
             index: null,
             newSkill: false,
-            newSkillButton: false,
-            cancelButton: false
+            newSkillButton: false
         },
         emp_id: "",
         editActiveSkill: {
@@ -64,7 +63,8 @@ class SkillsPage extends Component {
                 man_rating: "",
                 skill_approval: false,
                 emp_id: this.state.emp_id
-            }
+            },
+            err: ""
         });
     };
 
@@ -219,7 +219,8 @@ class SkillsPage extends Component {
                             man_rating: "",
                             skill_approval: false,
                             emp_id: this.state.emp_id
-                        }
+                        },
+                        err: ""
                     })
             );
         } catch (err) {
@@ -237,11 +238,11 @@ class SkillsPage extends Component {
             this.setState({ err: "One or more fields are empty" });
             return false;
         }
-        let checkSkill = this.state.skills.some(orgSkill => {
-            if (orgSkill.skill_name === skill.skill_name) return true;
-            else return false;
-        });
-        console.log(checkSkill);
+        let checkSkill = this.state.skills.some(
+            orgSkill =>
+                orgSkill.skill_name.toUpperCase() ===
+                skill.skill_name.toUpperCase()
+        );
         if (checkSkill && mode !== "edit") {
             this.setState({ err: "Skill already exists" });
             return false;

@@ -19,6 +19,7 @@ const Login = ({ handleSubmit, handleChange, loginDetails, err }) => {
                     <Segment className='wrapper_segment' stacked>
                         <Form.Input
                             fluid
+                            required
                             icon='user'
                             iconPosition='left'
                             placeholder='E-mail address'
@@ -28,6 +29,7 @@ const Login = ({ handleSubmit, handleChange, loginDetails, err }) => {
                         />
                         <Form.Input
                             fluid
+                            required
                             icon='lock'
                             iconPosition='left'
                             name='password'
