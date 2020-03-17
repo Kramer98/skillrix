@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Icon, Container, Header } from "semantic-ui-react";
+import { Button, Icon, Container, Header, Divider } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { fetchSkills } from "../../actions";
 import DisplaySkills from "../DisplaySkills/DisplaySkills";
@@ -11,7 +11,8 @@ class SkillsPage extends Component {
             state: false,
             index: null,
             newSkill: false,
-            newSkillButton: false
+            newSkillButton: false,
+            cancelButton: false
         },
         emp_id: "",
         editActiveSkill: {
@@ -21,7 +22,8 @@ class SkillsPage extends Component {
             man_rating: "",
             skill_approval: false,
             emp_id: localStorage.getItem("emp_id")
-        }
+        },
+        err: ""
     };
     getSkills = async () => {
         const emp_id = localStorage.getItem("emp_id");
@@ -46,6 +48,25 @@ class SkillsPage extends Component {
             }
         });
     };
+    handleCancel = (e, index) => {
+        this.setState({
+            editActive: {
+                state: false,
+                index: null,
+                newSkill: false,
+                newSkillButton: false,
+                cancelButton: false
+            },
+            editActiveSkill: {
+                skill_name: "",
+                experience: "",
+                emp_rating: "",
+                man_rating: "",
+                skill_approval: false,
+                emp_id: this.state.emp_id
+            }
+        });
+    };
 
     handleEdit = (e, index) => {
         let skill = this.state.skills.slice(index, index + 1);
@@ -56,42 +77,45 @@ class SkillsPage extends Component {
     };
 
     handleSave = async (e, index) => {
-        try {
-            const response = await axios.post(
-                `http://localhost:3001/skills/updateskill/${this.state.emp_id}`,
-                { ...this.state.editActiveSkill, skill_approval: false }
-            );
-            this.setState(
-                {
-                    skills: this.state.skills.map((skill, i) => {
-                        if (i === index)
-                            return {
-                                ...this.state.editActiveSkill,
-                                skill_approval: false
-                            };
-                        else return skill;
-                    }),
-                    editActive: {
-                        state: false,
-                        index: null,
-                        newSkillButton: false,
-                        newSkill: false
-                    }
-                },
-                () =>
-                    this.setState({
-                        editActiveSkill: {
-                            skill_name: "",
-                            experience: "",
-                            emp_rating: "",
-                            man_rating: "",
-                            skill_approval: false,
-                            emp_id: this.state.emp_id
-                        }
-                    })
-            );
-        } catch (error) {
-            console.log(error);
+        if (this.validateSkill(this.state.editActiveSkill, "edit")) {
+            try {
+                const response = await axios.post(
+                    `http://localhost:3001/skills/updateskill/${this.state.emp_id}`,
+                    { ...this.state.editActiveSkill, skill_approval: false }
+                );
+                this.setState(
+                    {
+                        skills: this.state.skills.map((skill, i) => {
+                            if (i === index)
+                                return {
+                                    ...this.state.editActiveSkill,
+                                    skill_approval: false
+                                };
+                            else return skill;
+                        }),
+                        editActive: {
+                            state: false,
+                            index: null,
+                            newSkillButton: false,
+                            newSkill: false
+                        },
+                        err: ""
+                    },
+                    () =>
+                        this.setState({
+                            editActiveSkill: {
+                                skill_name: "",
+                                experience: "",
+                                emp_rating: "",
+                                man_rating: "",
+                                skill_approval: false,
+                                emp_id: this.state.emp_id
+                            }
+                        })
+                );
+            } catch (error) {
+                console.log(error);
+            }
         }
     };
 
@@ -136,35 +160,41 @@ class SkillsPage extends Component {
     };
 
     handleSaveNewSkill = async (e, index) => {
-        try {
-            const response = await axios.post(
-                "http://localhost:3001/adduser",
-                this.state.editActiveSkill
-            );
-            this.setState(
-                {
-                    skills: [...this.state.skills, this.state.editActiveSkill],
-                    editActive: {
-                        ...this.state.editActive,
-                        newSkillButton: false,
-                        newSkill: false,
-                        state: false
-                    }
-                },
-                () =>
-                    this.setState({
-                        editActiveSkill: {
-                            skill_name: "",
-                            experience: "",
-                            emp_rating: "",
-                            man_rating: "",
-                            skill_approval: false,
-                            emp_id: this.state.emp_id
-                        }
-                    })
-            );
-        } catch (error) {
-            console.log(error);
+        if (this.validateSkill(this.state.editActiveSkill)) {
+            try {
+                const response = await axios.post(
+                    "http://localhost:3001/adduser",
+                    this.state.editActiveSkill
+                );
+                this.setState(
+                    {
+                        skills: [
+                            ...this.state.skills,
+                            this.state.editActiveSkill
+                        ],
+                        editActive: {
+                            ...this.state.editActive,
+                            newSkillButton: false,
+                            newSkill: false,
+                            state: false
+                        },
+                        err: ""
+                    },
+                    () =>
+                        this.setState({
+                            editActiveSkill: {
+                                skill_name: "",
+                                experience: "",
+                                emp_rating: "",
+                                man_rating: "",
+                                skill_approval: false,
+                                emp_id: this.state.emp_id
+                            }
+                        })
+                );
+            } catch (error) {
+                console.log(error);
+            }
         }
     };
 
@@ -197,10 +227,43 @@ class SkillsPage extends Component {
         }
     };
 
+    validateSkill = (skill, mode) => {
+        console.log(mode);
+        if (
+            skill.emp_id === "" ||
+            skill.experience === "" ||
+            skill.emp_rating === ""
+        ) {
+            this.setState({ err: "One or more fields are empty" });
+            return false;
+        }
+        let checkSkill = this.state.skills.some(orgSkill => {
+            if (orgSkill.skill_name === skill.skill_name) return true;
+            else return false;
+        });
+        console.log(checkSkill);
+        if (checkSkill && mode !== "edit") {
+            this.setState({ err: "Skill already exists" });
+            return false;
+        }
+        return true;
+    };
+
     render() {
         return (
             <Container>
                 <Header as='h2' content='Create/Update Skills' />
+                <Button
+                    floated='right'
+                    icon
+                    disabled={this.state.editActive.newSkillButton}
+                    onClick={this.handleAddNewSkill}
+                    color='blue'
+                >
+                    <Icon name='add' />
+                    &nbsp;Add Skill
+                </Button>
+                <Divider />
                 <DisplaySkills
                     editSkills={this.state.editSkills}
                     skills={this.state.skills || []}
@@ -213,17 +276,9 @@ class SkillsPage extends Component {
                     handleChangeNewSkill={this.handleChangeNewSkill}
                     handleDelete={this.handleDelete}
                     handleChangeEmpRating={this.handleChangeEmpRating}
+                    handleCancel={this.handleCancel}
                 />
-                <Button
-                    floated='right'
-                    icon
-                    disabled={this.state.editActive.newSkillButton}
-                    onClick={this.handleAddNewSkill}
-                    color='blue'
-                >
-                    <Icon name='add' />
-                    &nbsp;Add Skill
-                </Button>
+                {this.state.err}
             </Container>
         );
     }

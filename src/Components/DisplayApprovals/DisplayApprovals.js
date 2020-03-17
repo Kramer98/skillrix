@@ -22,7 +22,9 @@ const DisplayApprovals = ({ approvals }) => {
 
     return (
         <List divided animated celled>
-            {renderApprovals}
+            {approvals.length !== 0
+                ? renderApprovals
+                : "You don't have any pending approvals"}
         </List>
     );
 };

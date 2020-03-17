@@ -1,5 +1,12 @@
 import React from "react";
-import { Input, Table, Button, Icon, Dropdown } from "semantic-ui-react";
+import {
+    Input,
+    Table,
+    Button,
+    Icon,
+    Dropdown,
+    Header
+} from "semantic-ui-react";
 
 const options = [
     {
@@ -65,11 +72,20 @@ const DisplaySkills = ({
     handleSaveNewSkill,
     handleChangeNewSkill,
     handleDelete,
-    handleChangeEmpRating
+    handleChangeEmpRating,
+    handleCancel
 }) => {
     console.log(editActiveSkill);
     let button = null;
-    let row = <Table.Row key='no item'></Table.Row>;
+    let row = (
+        <>
+            <Table.Row>
+                <Table.Cell>
+                    <Header as='h4' content="You don't have any skills added" />
+                </Table.Cell>
+            </Table.Row>
+        </>
+    );
     let disabledRow = editActive.state;
     if (skills.length === 0 && editActive.newSkill === true) {
         row = (
@@ -126,6 +142,9 @@ const DisplaySkills = ({
                     >
                         <Icon name='save outline' />
                     </Button>
+                    <Button icon color='red' onClick={e => handleCancel(e)}>
+                        <Icon name='cancel'></Icon>
+                    </Button>
                 </Table.Cell>
             </Table.Row>
         );
@@ -137,13 +156,22 @@ const DisplaySkills = ({
                   if (editActive.state === true && editActive.index === index) {
                       // disabledRow = true;
                       button = (
-                          <Button
-                              icon
-                              color='green'
-                              onClick={e => handleSave(e, index)}
-                          >
-                              <Icon name='save outline'></Icon>
-                          </Button>
+                          <>
+                              <Button
+                                  icon
+                                  color='green'
+                                  onClick={e => handleSave(e, index)}
+                              >
+                                  <Icon name='save outline'></Icon>
+                              </Button>
+                              <Button
+                                  icon
+                                  color='red'
+                                  onClick={e => handleCancel(e, index)}
+                              >
+                                  <Icon name='cancel'></Icon>
+                              </Button>
+                          </>
                       );
                       row = (
                           <>
@@ -258,6 +286,7 @@ const DisplaySkills = ({
                                   </Table.Cell>
                                   <Table.Cell>
                                       <Input
+                                          required
                                           size='mini'
                                           name='experience'
                                           type='number'
@@ -269,6 +298,7 @@ const DisplaySkills = ({
                                   </Table.Cell>
                                   <Table.Cell>
                                       <Dropdown
+                                          required
                                           compact
                                           name='emp_rating'
                                           onChange={handleChangeEmpRating}
@@ -305,6 +335,13 @@ const DisplaySkills = ({
                                           }
                                       >
                                           <Icon name='save outline'></Icon>
+                                      </Button>
+                                      <Button
+                                          icon
+                                          color='red'
+                                          onClick={e => handleCancel(e, index)}
+                                      >
+                                          <Icon name='cancel'></Icon>
                                       </Button>
                                   </Table.Cell>
                               </Table.Row>
@@ -367,18 +404,7 @@ const DisplaySkills = ({
                     <Table.HeaderCell>Actions</Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
-            <Table.Body>
-                {dispSkills ? (
-                    dispSkills
-                ) : (
-                    <Table.Row>
-                        <Table.Cell>
-                            "You Don't have any Skills added yet. Please add
-                            bro"
-                        </Table.Cell>
-                    </Table.Row>
-                )}
-            </Table.Body>
+            <Table.Body>{skills.length !== 0 ? dispSkills : row}</Table.Body>
         </Table>
     );
 };

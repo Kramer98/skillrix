@@ -38,7 +38,7 @@ const ManagerHome = props => {
                         <Card
                             centered
                             as={Link}
-                            to='/dashboard'
+                            to='/table'
                             header='Dashboard'
                             meta='Stats'
                             description='Click here to view stats for your organisation.'

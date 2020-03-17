@@ -32,12 +32,16 @@ const getUserById = (req, res) => {
 };
 
 const getSkills = (req, res) => {
-    pool.query("select * from Employee_skills", (error, results) => {
-        if (error) {
-            console.log(results);
+    // const { emp_id } = req.body;
+    pool.query(
+        "select emp_id, emp_name,emp_role,account,emp_location,skill_name,final_rating,experience from  Employee_details natural join Employee_skills",
+        (error, results) => {
+            if (error) {
+                throw error;
+            }
+            res.status(200).json(results.rows);
         }
-        res.status(200).json(results.rows);
-    });
+    );
 };
 
 const getSkillById = (req, res) => {
@@ -274,11 +278,10 @@ const getFinalrating = (req, res) => {
     const { emp_id } = req.params;
 
     const { skill_name, skill_approval, man_rating, emp_rating } = req.body;
-    console.log(man_rating);
-
+    const final_rating = (parseFloat(emp_rating) + parseFloat(man_rating)) / 2;
     pool.query(
-        "update Employee_skills set skill_approval = true , man_rating = $3, final_rating = (emp_rating + man_rating) / 2 where emp_id = $1 and skill_name = $2",
-        [emp_id, skill_name, man_rating],
+        "update Employee_skills set skill_approval = true , man_rating = $3, final_rating = $4 where emp_id = $1 and skill_name = $2",
+        [emp_id, skill_name, man_rating, final_rating],
         (error, results) => {
             if (error) {
                 throw error;

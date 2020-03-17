@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Container, Card } from "semantic-ui-react";
+import { Grid, Container, Card, Advertisement } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 const EmployeeHome = props => {
@@ -10,7 +10,12 @@ const EmployeeHome = props => {
         >
             <Grid divided='vertically'>
                 <Grid.Row columns={1} textAlign='left'>
-                    <Grid.Column>COLUMN2</Grid.Column>
+                    <Grid.Column>
+                        <Advertisement
+                            unit='medium rectangle'
+                            test='Medium Rectangle'
+                        />
+                    </Grid.Column>
                 </Grid.Row>
 
                 <Grid.Row columns={2} textAlign='center'>

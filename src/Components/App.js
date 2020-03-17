@@ -8,6 +8,7 @@ import axios from "axios";
 import Header from "./Header/Header";
 import ApprovalsPage from "./ApprovalsPage/ApprovalsPage";
 import EmployeeApprovalPage from "./EmployeeApprovalPage/EmployeeApprovalPage";
+import FilterTable from "./FilterTable/FilterTable";
 
 class App extends Component {
     state = {
@@ -93,19 +94,27 @@ class App extends Component {
                         />
                     )}
                 />
-                <Route exact path='/mhome' component={ManagerHome} />
-                <Route exact path='/ehome' component={EmployeeHome} />
-                <Route exact path='/skills' component={SkillsPage} />
-                <Route exact path='/approvals' component={ApprovalsPage} />
-                <Route
-                    path='/approvals/:id'
-                    render={props => (
-                        <EmployeeApprovalPage
-                            {...props}
-                            emp_id={props.match.params.id}
-                        />
-                    )}
-                />
+                <Route exact path='/table' component={FilterTable} />
+                {/* {this.state.isAuthenticated 
+                this.props.location.pathname !== "/" ? ( */}
+                <>
+                    <Route exact path='/mhome' component={ManagerHome} />
+                    <Route exact path='/ehome' component={EmployeeHome} />
+                    <Route exact path='/skills' component={SkillsPage} />
+                    <Route exact path='/approvals' component={ApprovalsPage} />
+                    <Route
+                        path='/approvals/:id'
+                        render={props => (
+                            <EmployeeApprovalPage
+                                {...props}
+                                emp_id={props.match.params.id}
+                            />
+                        )}
+                    />
+                </>
+                {/* ) : (
+                    <div>404 not found</div>
+                )} */}
             </div>
         );
     }

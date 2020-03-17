@@ -24,7 +24,7 @@ app.listen(port, () => {
 app.get("/users", db.getusers);
 app.post("/getApprovals", db.getApprovals);
 app.post("/users/:email", db.getUserById);
-app.get("/skills/", db.getSkills);
+app.get("/skills", db.getSkills);
 app.post("/skills/:id", db.getSkillById);
 app.post("/addskill", db.addSkill);
 app.post("/adduser", db.addUserSKill);
@@ -35,8 +35,4 @@ app.post("/skills/deleteskill/:id", db.deleteData);
 app.post("/addNewUser", db.addNewUser);
 app.post("/authUser", db.authUser);
 app.post("/getUnapprovedSkills/:id", db.getUnapprovedSkillsById);
-<<<<<<< HEAD
 app.post("/skills/getFinalRating/:emp_id", db.getFinalrating);
-=======
-app.post("/getFinalRating",db.getFinalrating);
->>>>>>> 9fad63510e631ffdfa087122a9adc515b8739389

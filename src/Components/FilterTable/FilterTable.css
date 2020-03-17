@@ -1,0 +1,29 @@
+.rt-thead.-header {
+    color: white;
+    border: 1px solid transparent; /* No more visible border */
+    height: 30px;
+    transition: all 0.3s;
+    background: #3e4444; /* Darken header a bit */
+    font-weight: bold;
+}
+
+.rt-td {
+    border: 1px solid transparent; /* No more visible border */
+    height: 30px;
+    transition: all 0.3s;
+    background: #fafafa;
+    text-align: center;
+}
+
+.rt-tr-group:nth-child(even) .rt-td {
+    background: #f1f1f1;
+}
+
+.rt-tr-group:nth-child(odd) .rt-td {
+    background: #fefefe;
+}
+
+.rt-tr-group .rt-td:hover {
+    background: #666;
+    color: #fff;
+}
