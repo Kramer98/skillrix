@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Container, Header, Divider } from "semantic-ui-react";
+import { Container, Header, Divider, Button, Icon } from "semantic-ui-react";
 
 import DisplayApprovals from "../DisplayApprovals/DisplayApprovals";
+import { Link } from "react-router-dom";
 
 class ApprovalsPage extends Component {
     state = {
@@ -27,6 +28,10 @@ class ApprovalsPage extends Component {
                 <Header as='h2'>Your Pending Employee Skill Approvals</Header>
                 <Divider />
                 <DisplayApprovals approvals={this.state.approvals} />
+                <Button as={Link} to='/mhome' color='blue' floated='left'>
+                    <Icon name='arrow left' size='small' />
+                    Back To Home
+                </Button>
             </Container>
         );
     }

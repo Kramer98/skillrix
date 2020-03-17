@@ -270,6 +270,27 @@ const getUnapprovedSkillsById = (req, res) => {
     );
 };
 
+const getFinalrating = (req, res) => {
+    const { emp_id } = req.params;
+
+    const { skill_name, skill_approval, man_rating, emp_rating } = req.body;
+    console.log(man_rating);
+
+    pool.query(
+        "update Employee_skills set skill_approval = true , man_rating = $3, final_rating = (emp_rating + man_rating) / 2 where emp_id = $1 and skill_name = $2",
+        [emp_id, skill_name, man_rating],
+        (error, results) => {
+            if (error) {
+                throw error;
+            }
+            console.log(man_rating);
+            res.status(201).send(
+                `Employee added with ID : ${results.insertId}`
+            );
+        }
+    );
+};
+
 module.exports = {
     getusers,
     getUserById,
@@ -283,5 +304,6 @@ module.exports = {
     deleteData,
     addNewUser,
     authUser,
-    getUnapprovedSkillsById
+    getUnapprovedSkillsById,
+    getFinalrating
 };

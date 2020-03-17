@@ -1,8 +1,6 @@
 import React from "react";
-import EmployeePhoto from "../EmployeePhoto/EmployeePhoto";
 import { Grid, Container, Card } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import EmployeeDetails from "../EmployeeDetails/EmployeeDetails";
 
 const EmployeeHome = props => {
     return (

@@ -59,12 +59,16 @@ class SkillsPage extends Component {
         try {
             const response = await axios.post(
                 `http://localhost:3001/skills/updateskill/${this.state.emp_id}`,
-                this.state.editActiveSkill
+                { ...this.state.editActiveSkill, skill_approval: false }
             );
             this.setState(
                 {
                     skills: this.state.skills.map((skill, i) => {
-                        if (i === index) return this.state.editActiveSkill;
+                        if (i === index)
+                            return {
+                                ...this.state.editActiveSkill,
+                                skill_approval: false
+                            };
                         else return skill;
                     }),
                     editActive: {

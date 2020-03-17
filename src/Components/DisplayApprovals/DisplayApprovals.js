@@ -1,5 +1,5 @@
 import React from "react";
-import { List } from "semantic-ui-react";
+import { List, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 const DisplayApprovals = ({ approvals }) => {
@@ -12,6 +12,7 @@ const DisplayApprovals = ({ approvals }) => {
             >
                 <List.Content verticalAlign='middle'>
                     <List.Header>
+                        <Icon name='user' />
                         {approval.emp_id} - {approval.emp_name}
                     </List.Header>
                 </List.Content>
@@ -20,7 +21,7 @@ const DisplayApprovals = ({ approvals }) => {
     });
 
     return (
-        <List divided animated>
+        <List divided animated celled>
             {renderApprovals}
         </List>
     );

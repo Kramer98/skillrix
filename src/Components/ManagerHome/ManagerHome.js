@@ -1,6 +1,4 @@
 import React from "react";
-import EmployeePhoto from "../EmployeePhoto/EmployeePhoto";
-import EmployeeDetails from "../EmployeeDetails/EmployeeDetails";
 import { Grid, Container, Card } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 

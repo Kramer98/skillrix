@@ -1,11 +1,12 @@
 import React from "react";
 import { Table, Header, Dropdown, Button, Icon } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 const options = [
     {
         key: 1,
         text: "1",
-        value: "1"
+        value: 1
     },
     {
         key: 2,
@@ -108,6 +109,10 @@ const DisplayEmployeeApproval = ({
                 </Table.Header>
                 <Table.Body>{renderPending}</Table.Body>
             </Table>
+            <Button as={Link} to='/approvals' color='blue'>
+                <Icon name='arrow left' size='small'></Icon>
+                Back To Approvals
+            </Button>
         </>
     );
 };

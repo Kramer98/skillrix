@@ -29,7 +29,7 @@ class EmployeeApprovalPage extends Component {
     handleApprove = async (e, index) => {
         try {
             const response = await axios.post(
-                `http://localhost:3001/skills/updateskill/${this.props.emp_id}`,
+                `http://localhost:3001/skills/getFinalRating/${this.props.emp_id}`,
                 { ...this.state.skills[index], skill_approval: true }
             );
             this.setState({
