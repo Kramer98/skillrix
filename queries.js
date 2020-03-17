@@ -4,7 +4,7 @@ const pool = new Pool({
     user: "postgres",
     host: "localhost",
     database: "Skillrix",
-    password: "Ashish@007",
+    password: "root",
     port: 5432
 });
 const getusers = (request, response) => {
@@ -270,6 +270,22 @@ const getUnapprovedSkillsById = (req, res) => {
     );
 };
 
+const getFinalrating = (req,res) =>
+{
+   // const {id} = req.params;
+    const {emp_id,skill_name} = req.body;
+    pool.query('update employee_skills set final_rating = (emp_rating + man_rating) / 2 where emp_id = $1 and skill_name = $2',[emp_id,skill_name],(error,results)=>
+    {
+        if(error)
+        {
+            throw error;
+        }
+        res.status(201).send(`Employee added with ID : ${results.insertId}`)
+
+
+    })
+}
+
 module.exports = {
     getusers,
     getUserById,
@@ -283,5 +299,6 @@ module.exports = {
     deleteData,
     addNewUser,
     authUser,
-    getUnapprovedSkillsById
+    getUnapprovedSkillsById,
+    getFinalrating,
 };

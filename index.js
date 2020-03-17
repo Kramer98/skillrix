@@ -35,3 +35,4 @@ app.post("/skills/deleteskill/:id", db.deleteData);
 app.post("/addNewUser", db.addNewUser);
 app.post("/authUser", db.authUser);
 app.post("/getUnapprovedSkills/:id", db.getUnapprovedSkillsById);
+app.post("/getFinalRating",db.getFinalrating);
