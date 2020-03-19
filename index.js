@@ -35,3 +35,5 @@ app.post("/addNewUser", db.addNewUser);
 app.post("/authUser", db.authUser);
 app.post("/getUnapprovedSkills/:id", db.getUnapprovedSkillsById);
 app.post("/skills/getFinalRating/:emp_id", db.getFinalrating);
+app.post("/getUserDeets", db.getUserDeets);
+app.post("/getSkillApproved", db.getSkillApproved);

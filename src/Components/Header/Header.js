@@ -12,8 +12,12 @@ export default class AppHeader extends Component {
 
         return (
             <Menu>
-                <Menu.Item header as={Link} to='/mhome'>
-                    Our Company
+                <Menu.Item
+                    header
+                    as={Link}
+                    to={this.props.userdata.manager ? "/mhome" : "/ehome"}
+                >
+                    Skillrix
                 </Menu.Item>
                 {this.props.isAuthenticated ? (
                     <>

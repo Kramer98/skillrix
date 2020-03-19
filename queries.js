@@ -294,6 +294,44 @@ const getFinalrating = (req, res) => {
     );
 };
 
+const getUserDeets = (req, res) => {
+    const { emp_id } = req.body;
+    let details = {};
+    pool.query(
+        "select emp_name,account,practice,emp_location,manager_id from Employee_details where emp_id= $1",
+        [emp_id]
+    )
+        .then(resu => {
+            details.emp_details = resu.rows[0];
+            console.log(details);
+            pool.query(
+                "SELECT emp_id,emp_name,emp_location FROM EMPLOYEE_DETAILS WHERE emp_id=$1",
+                [details.emp_details.manager_id]
+            )
+                .then(resu => {
+                    console.log(details);
+                    details.manager_details = resu.rows[0];
+                    res.status(200).json(details);
+                })
+                .catch(e => console.log(e));
+        })
+        .catch(e => console.log(e));
+};
+
+const getSkillApproved = (req, res) => {
+    const { emp_id } = req.body;
+    pool.query(
+        "select skill_name,final_rating from employee_skills where skill_approval= true and emp_id = $1",
+        [emp_id],
+        (error, results) => {
+            if (error) {
+                throw error;
+            }
+            res.status(200).json(results.rows);
+        }
+    );
+};
+
 module.exports = {
     getusers,
     getUserById,
@@ -308,5 +346,7 @@ module.exports = {
     addNewUser,
     authUser,
     getUnapprovedSkillsById,
-    getFinalrating
+    getFinalrating,
+    getUserDeets,
+    getSkillApproved
 };

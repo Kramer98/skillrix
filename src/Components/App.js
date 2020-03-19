@@ -9,6 +9,7 @@ import Header from "./Header/Header";
 import ApprovalsPage from "./ApprovalsPage/ApprovalsPage";
 import EmployeeApprovalPage from "./EmployeeApprovalPage/EmployeeApprovalPage";
 import FilterTable from "./FilterTable/FilterTable";
+import SkillMatrix from "./SkillMatrix/SkillMatrix";
 
 class App extends Component {
     state = {
@@ -18,7 +19,8 @@ class App extends Component {
             email: "",
             password: ""
         },
-        isAuthenticated: false
+        isAuthenticated: false,
+        manager: false
     };
 
     handleChange = e => {
@@ -45,9 +47,13 @@ class App extends Component {
                     isAuthenticated: localStorage.getItem("isAuthenticated")
                 });
                 localStorage.setItem("emp_id", response.data.data.emp_id);
-                if (response.data.data.manager === true)
+                if (response.data.data.manager === true) {
+                    this.setState({ manager: true });
                     this.props.history.push("/mhome");
-                else this.props.history.push("/ehome");
+                } else {
+                    localStorage.setItem("manager", false);
+                    this.props.history.push("/ehome");
+                }
             } else {
                 this.setState({
                     err: response.data.err,
@@ -70,7 +76,8 @@ class App extends Component {
                 email: "",
                 password: ""
             },
-            isAuthenticated: false
+            isAuthenticated: false,
+            manager: false
         });
     };
     render() {
@@ -94,27 +101,36 @@ class App extends Component {
                         />
                     )}
                 />
-                <Route exact path='/table' component={FilterTable} />
-                {/* {this.state.isAuthenticated 
-                this.props.location.pathname !== "/" ? ( */}
-                <>
-                    <Route exact path='/mhome' component={ManagerHome} />
-                    <Route exact path='/ehome' component={EmployeeHome} />
-                    <Route exact path='/skills' component={SkillsPage} />
-                    <Route exact path='/approvals' component={ApprovalsPage} />
-                    <Route
-                        path='/approvals/:id'
-                        render={props => (
-                            <EmployeeApprovalPage
-                                {...props}
-                                emp_id={props.match.params.id}
-                            />
-                        )}
-                    />
-                </>
-                {/* ) : (
-                    <div>404 not found</div>
-                )} */}
+
+                {localStorage.getItem("isAuthenticated") &&
+                this.state.manager ? (
+                    <>
+                        <Route exact path='/mhome' component={ManagerHome} />
+                        <Route exact path='/table' component={FilterTable} />
+                        <Route exact path='/skills' component={SkillsPage} />
+                        <Route exact path='/matrix' component={SkillMatrix} />
+                        <Route
+                            exact
+                            path='/approvals'
+                            component={ApprovalsPage}
+                        />
+                        <Route
+                            path='/approvals/:id'
+                            render={props => (
+                                <EmployeeApprovalPage
+                                    {...props}
+                                    emp_id={props.match.params.id}
+                                />
+                            )}
+                        />
+                    </>
+                ) : (
+                    <>
+                        <Route exact path='/ehome' component={EmployeeHome} />
+                        <Route exact path='/skills' component={SkillsPage} />
+                        <Route exact path='/matrix' component={SkillMatrix} />
+                    </>
+                )}
             </div>
         );
     }
