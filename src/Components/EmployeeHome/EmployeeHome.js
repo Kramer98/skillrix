@@ -162,7 +162,7 @@ class EmployeeHome extends Component {
                         <Card
                             centered
                             as={Link}
-                            to='/skillmatrix'
+                            to='/matrix'
                             header='Skill Matrix'
                             meta='Matrix'
                             description='Click here to view your skill matrix/competancy score.'
