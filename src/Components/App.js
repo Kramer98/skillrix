@@ -49,6 +49,7 @@ class App extends Component {
                 localStorage.setItem("emp_id", response.data.data.emp_id);
                 if (response.data.data.manager === true) {
                     this.setState({ manager: true });
+                    localStorage.setItem("manager", true);
                     this.props.history.push("/mhome");
                 } else {
                     localStorage.setItem("manager", false);
@@ -69,6 +70,7 @@ class App extends Component {
         localStorage.removeItem("emp_id");
         this.props.history.push("/");
         localStorage.setItem("isAuthenticated", false);
+        localStorage.setItem("manager", false);
         this.setState({
             err: "",
             userdata: {},
@@ -102,8 +104,8 @@ class App extends Component {
                     )}
                 />
 
-                {localStorage.getItem("isAuthenticated") &&
-                this.state.manager ? (
+                {localStorage.getItem("isAuthenticated") === "true" &&
+                localStorage.getItem("manager") === "true" ? (
                     <>
                         <Route exact path='/mhome' component={ManagerHome} />
                         <Route exact path='/table' component={FilterTable} />

@@ -15,11 +15,15 @@ export default class AppHeader extends Component {
                 <Menu.Item
                     header
                     as={Link}
-                    to={this.props.userdata.manager ? "/mhome" : "/ehome"}
+                    to={
+                        localStorage.getItem("manager") === "true"
+                            ? "/mhome"
+                            : "/ehome"
+                    }
                 >
                     Skillrix
                 </Menu.Item>
-                {this.props.isAuthenticated ? (
+                {localStorage.getItem("isAuthenticated") === "true" ? (
                     <>
                         <Menu.Item
                             name='Home'
@@ -27,7 +31,7 @@ export default class AppHeader extends Component {
                             onClick={this.handleItemClick}
                             as={Link}
                             to={
-                                this.props.userdata.manager
+                                localStorage.getItem("manager") === "true"
                                     ? "/mhome"
                                     : "/ehome"
                             }
