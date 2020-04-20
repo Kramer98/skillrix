@@ -9,32 +9,29 @@ export default class AppHeader extends Component {
 
     render() {
         const { activeItem } = this.state;
+        const role = localStorage.getItem("role");
+        const isAuthenticated = localStorage.getItem("isAuthenticated");
+        let home;
+        if (role === "manager" && isAuthenticated === "true") home = "/mhome";
 
+        if (role === "admin" && isAuthenticated === "true") home = "/ahome";
+
+        if (role === "employee" && isAuthenticated === "true") home = "/ehome";
+        if (isAuthenticated === "false") home = "/";
+        console.log("home   ", home);
         return (
             <Menu>
-                <Menu.Item
-                    header
-                    as={Link}
-                    to={
-                        localStorage.getItem("manager") === "true"
-                            ? "/mhome"
-                            : "/ehome"
-                    }
-                >
+                <Menu.Item header as={Link} to={home}>
                     Skillrix
                 </Menu.Item>
-                {localStorage.getItem("isAuthenticated") === "true" ? (
+                {isAuthenticated === "true" ? (
                     <>
                         <Menu.Item
                             name='Home'
                             active={activeItem === "Home"}
                             onClick={this.handleItemClick}
                             as={Link}
-                            to={
-                                localStorage.getItem("manager") === "true"
-                                    ? "/mhome"
-                                    : "/ehome"
-                            }
+                            to={home}
                         />
                         <Menu.Item
                             name='Skills'

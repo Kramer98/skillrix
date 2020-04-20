@@ -9,7 +9,7 @@ app.use(cors());
 app.use(bodyparser.json());
 app.use(
     bodyparser.urlencoded({
-        extended: true
+        extended: true,
     })
 );
 
@@ -23,6 +23,7 @@ app.listen(port, () => {
 
 app.get("/users", db.getusers);
 app.post("/getApprovals", db.getApprovals);
+app.post("/getEmp", db.getEmp);
 app.post("/users/:email", db.getUserById);
 app.get("/skills", db.getSkills);
 app.post("/skills/:id", db.getSkillById);
@@ -34,6 +35,13 @@ app.post("/skills/deleteskill/:id", db.deleteData);
 app.post("/addNewUser", db.addNewUser);
 app.post("/authUser", db.authUser);
 app.post("/getUnapprovedSkills/:id", db.getUnapprovedSkillsById);
+app.post("/getSkills/:id", db.getSkillsById);
 app.post("/skills/getFinalRating/:emp_id", db.getFinalrating);
 app.post("/getUserDeets", db.getUserDeets);
 app.post("/getSkillApproved", db.getSkillApproved);
+app.post("/getAllSkillCount", db.getAllSkillCount);
+app.post("/getAvgRatings", db.empRatingVsAvgRating);
+app.post("/addNewEmployee", db.addNewEmployee);
+app.post("/avgempRatings", db.avgempRatings);
+app.post("/getManEmpCount", db.getManEmpCount);
+app.post("/getMinMaxSkillsRating", db.getMinMaxSkillsRating);

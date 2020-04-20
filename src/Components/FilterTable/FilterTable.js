@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import axios from "axios";
 import ReactTable from "react-table-6";
 import "react-table-6/react-table.css";
-import { Header } from "semantic-ui-react";
+import { Header, Button, Icon } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 import "./FilterTable.css";
 class FilterTable extends Component {
     state = {
-        skills: []
+        skills: [],
     };
 
     async getSkills() {
@@ -35,64 +36,64 @@ class FilterTable extends Component {
                 Header: "Employee ID",
                 accessor: "emp_id",
                 style: {
-                    textAlign: "center"
+                    textAlign: "center",
                 },
-                filterMethod: this.filterMethod
+                filterMethod: this.filterMethod,
             },
             {
                 Header: "Employee Name",
                 accessor: "emp_name",
                 style: {
-                    textAlign: "center"
+                    textAlign: "center",
                 },
-                filterMethod: this.filterMethod
+                filterMethod: this.filterMethod,
             },
             {
                 Header: "Location",
                 accessor: "emp_location",
                 style: {
-                    textAlign: "center"
+                    textAlign: "center",
                 },
-                filterMethod: this.filterMethod
+                filterMethod: this.filterMethod,
             },
             {
                 Header: "Account",
                 accessor: "account",
                 style: {
-                    textAlign: "center"
+                    textAlign: "center",
                 },
-                filterMethod: this.filterMethod
+                filterMethod: this.filterMethod,
             },
             {
                 Header: "Employee Role",
                 accessor: "emp_role",
                 style: {
-                    textAlign: "center"
+                    textAlign: "center",
                 },
-                filterMethod: this.filterMethod
+                filterMethod: this.filterMethod,
             },
             {
                 Header: "Skill Name",
                 accessor: "skill_name",
                 style: {
-                    textAlign: "center"
+                    textAlign: "center",
                 },
-                filterMethod: this.filterMethod
+                filterMethod: this.filterMethod,
             },
             {
                 Header: "Experience",
                 accessor: "experience",
                 style: {
-                    textAlign: "center"
-                }
+                    textAlign: "center",
+                },
             },
             {
                 Header: "Rating",
                 accessor: "final_rating",
                 style: {
-                    textAlign: "center"
-                }
-            }
+                    textAlign: "center",
+                },
+            },
         ];
         return (
             <>
@@ -107,6 +108,16 @@ class FilterTable extends Component {
                     filterable
                     defaultPageSize={10}
                 ></ReactTable>
+                <Button
+                    as={Link}
+                    to='/dashboard'
+                    style={{ marginTop: "2%" }}
+                    color='blue'
+                    floated='left'
+                >
+                    <Icon name='arrow left' size='small' />
+                    Back To Dashboard
+                </Button>
             </>
         );
     }

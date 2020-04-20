@@ -5,7 +5,7 @@ const pool = new Pool({
     host: "localhost",
     database: "Skillrix",
     password: "Ashish@007",
-    port: 5432
+    port: 5432,
 });
 const getusers = (request, response) => {
     pool.query("select emp_name from Employee_details", (error, results) => {
@@ -85,7 +85,7 @@ const addUserSKill = (req, res) => {
         experience,
         emp_rating,
         man_rating,
-        skill_approval
+        skill_approval,
     } = req.body;
     console.log(emp_id);
     pool.query(
@@ -96,7 +96,7 @@ const addUserSKill = (req, res) => {
             parseFloat(experience),
             parseInt(emp_rating),
             parseInt(man_rating) || null,
-            skill_approval
+            skill_approval,
         ],
         (error, results) => {
             if (error) {
@@ -110,10 +110,9 @@ const addUserSKill = (req, res) => {
 };
 
 const getEmp = (req, res) => {
-    const { emp_id } = req.params;
-    console.log(emp_id);
+    const { emp_id } = req.body;
     pool.query(
-        "select emp_name from Employee_details where manager_id = $1",
+        "select emp_name,emp_id from Employee_details where manager_id = $1",
         [emp_id],
         (error, results) => {
             if (error) {
@@ -126,15 +125,13 @@ const getEmp = (req, res) => {
 
 const updateUserSKill = (req, res) => {
     const { emp_id } = req.params;
-    console.log(req.body);
     const {
         skill_name,
         experience,
         emp_rating,
         man_rating,
-        skill_approval
+        skill_approval,
     } = req.body;
-    console.log(emp_id);
     pool.query(
         "UPDATE Employee_skills set experience = $3, emp_rating = $4 , man_rating = $5, skill_approval = $6 WHERE emp_id = $1 AND skill_name=$2",
         [
@@ -143,7 +140,7 @@ const updateUserSKill = (req, res) => {
             parseFloat(experience),
             parseInt(emp_rating),
             parseInt(man_rating) || null,
-            skill_approval
+            skill_approval,
         ],
         (error, results) => {
             if (error) {
@@ -177,7 +174,7 @@ const addNewUser = (req, res) => {
     console.log(email);
     console.log(password);
     const saltRounds = 10;
-    bcrypt.hash(password, saltRounds, function(err, hashedPassword) {
+    bcrypt.hash(password, saltRounds, function (err, hashedPassword) {
         if (err) {
             throw err;
         } else {
@@ -218,21 +215,21 @@ const authUser = (req, res) => {
                         (err, result) => {
                             if (result === true) {
                                 pool.query(
-                                    "SELECT emp_id,manager,emp_name from employee_details WHERE email=$1",
+                                    "SELECT emp_id,emp_name,roles from employee_details WHERE email=$1",
                                     [email],
                                     (err, results) => {
                                         if (err) throw err;
                                         else {
                                             res.status(201).json({
                                                 err: null,
-                                                data: results.rows[0]
+                                                data: results.rows[0],
                                             });
                                         }
                                     }
                                 );
                             } else
                                 res.status(201).json({
-                                    err: `Invalid Password`
+                                    err: `Invalid Password`,
                                 });
                         }
                     );
@@ -301,21 +298,19 @@ const getUserDeets = (req, res) => {
         "select emp_name,account,practice,emp_location,manager_id from Employee_details where emp_id= $1",
         [emp_id]
     )
-        .then(resu => {
+        .then((resu) => {
             details.emp_details = resu.rows[0];
-            console.log(details);
             pool.query(
                 "SELECT emp_id,emp_name,emp_location FROM EMPLOYEE_DETAILS WHERE emp_id=$1",
                 [details.emp_details.manager_id]
             )
-                .then(resu => {
-                    console.log(details);
+                .then((resu) => {
                     details.manager_details = resu.rows[0];
                     res.status(200).json(details);
                 })
-                .catch(e => console.log(e));
+                .catch((e) => console.log(e));
         })
-        .catch(e => console.log(e));
+        .catch((e) => console.log(e));
 };
 
 const getSkillApproved = (req, res) => {
@@ -330,6 +325,181 @@ const getSkillApproved = (req, res) => {
             res.status(200).json(results.rows);
         }
     );
+};
+
+const getAllSkillCount = (req, res) => {
+    pool.query(
+        "select skill_name as x, count(emp_id) as y from Employee_skills group by  skill_name",
+        (error, results) => {
+            if (error) {
+                throw error;
+            }
+            console.log(results.rows);
+            res.status(200).json(results.rows);
+        }
+    );
+};
+
+const empRatingVsAvgRating = (req, res) => {
+    const { emp_id } = req.body;
+    let ratings = {};
+    console.log(emp_id);
+    pool.query(
+        "select skill_name as x,avg(final_rating) as y from Employee_skills where emp_id  = $1 group by skill_name order by skill_name",
+        [emp_id]
+    )
+        .then((resu) => {
+            ratings.final_rating = resu.rows;
+
+            pool.query(
+                "select skill_name as x, avg(final_rating) as y from Employee_skills where skill_name in (select skill_name from Employee_skills where emp_id = $1) group by skill_name order by skill_name",
+                [emp_id]
+            )
+
+                .then((resu) => {
+                    ratings.avg_rating = resu.rows;
+
+                    res.status(200).json(ratings);
+                })
+                .catch((e) => console.log(e));
+        })
+
+        .catch((e) => console.log(e));
+};
+
+const getSkillsById = (req, res) => {
+    const { id } = req.params;
+    pool.query(
+        "select skill_name,experience,emp_rating,man_rating,skill_approval from Employee_Skills where emp_id = $1",
+        [id],
+        (error, results) => {
+            if (error) {
+                console.log(error);
+            }
+            res.status(200).json(results.rows);
+        }
+    );
+};
+
+const addNewEmployee = (req, res) => {
+    const {
+        emp_id,
+        email,
+        emp_name,
+        account,
+        practice,
+        hire_date,
+        emp_role,
+        manager_id,
+        roles,
+        emp_location,
+        password,
+    } = req.body;
+    console.log(email);
+    console.log(password);
+    const saltRounds = 10;
+    bcrypt.hash(password, saltRounds, function (err, hashedPassword) {
+        if (err) {
+            throw err;
+        } else {
+            pool.query(
+                "insert into employee_auth (email,password) values ($1,$2)",
+                [email, hashedPassword],
+                (error, results) => {
+                    if (error) {
+                        throw error;
+                    } else {
+                        console.log(results);
+                    }
+                }
+            );
+        }
+    });
+
+    pool.query(
+        "insert into Employee_details values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
+        [
+            emp_id,
+            email,
+            emp_name,
+            account,
+            practice,
+            hire_date,
+            emp_role,
+            manager_id,
+            emp_location,
+            roles,
+        ],
+        (error, results) => {
+            if (error) {
+                throw error;
+            }
+            console.log(results.rows);
+            res.status(201).send(`Employee added with ID : ${results.email}`);
+        }
+    );
+};
+
+const avgempRatings = (req, res) => {
+    const { manager_id } = req.body;
+    let details = {};
+    pool.query(
+        "select skill_name as x,avg(final_rating) as y from Employee_details natural join Employee_skills where manager_id  = $1 group by skill_name order by skill_name",
+        [manager_id]
+    )
+        .then((resu) => {
+            details.final_rating = resu.rows;
+            pool.query(
+                "select skill_name as x, avg(final_rating) as y from Employee_skills where skill_name in (select skill_name from Employee_Details natural join Employee_skills where manager_id = $1) group by skill_name order by skill_name",
+                [manager_id]
+            )
+                .then((resu) => {
+                    details.avg_rating = resu.rows;
+
+                    res.status(200).json(details);
+                })
+                .catch((e) => console.log(e));
+        })
+        .catch((e) => console.log(e));
+};
+
+const getManEmpCount = (req, res) => {
+    const { manager_id } = req.body;
+    pool.query(
+        "select skill_name as x,count(emp_id) as y from  employee_Details natural join employee_skills where manager_id = $1 group by skill_name ",
+        [manager_id],
+        (error, results) => {
+            if (error) {
+                throw error;
+            }
+            res.status(200).json(results.rows);
+        }
+    );
+};
+
+const getMinMaxSkillsRating = (req, res) => {
+    const { manager_id } = req.body;
+    let details = {};
+    console.log(manager_id);
+    pool.query(
+        "select skill_name as x, min(final_rating) as y from Employee_details natural join employee_skills where manager_id = $1 group by skill_name order by skill_name",
+        [manager_id]
+    )
+        .then((resu) => {
+            details.min_rating = resu.rows;
+            console.log(details.min_rating);
+            pool.query(
+                "select skill_name as x , max(final_rating) as y from Employee_details natural join employee_skills where manager_id = $1 group by skill_name order by skill_name",
+                [manager_id]
+            )
+                .then((resu) => {
+                    details.max_rating = resu.rows;
+
+                    res.status(200).json(details);
+                })
+                .catch((e) => console.log(e));
+        })
+        .catch((e) => console.log(e));
 };
 
 module.exports = {
@@ -348,5 +518,12 @@ module.exports = {
     getUnapprovedSkillsById,
     getFinalrating,
     getUserDeets,
-    getSkillApproved
+    getSkillApproved,
+    getAllSkillCount,
+    empRatingVsAvgRating,
+    getSkillsById,
+    addNewEmployee,
+    avgempRatings,
+    getManEmpCount,
+    getMinMaxSkillsRating,
 };
